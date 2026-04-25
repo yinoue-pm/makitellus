@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>画像制作フロー設計｜株式会社マキテラス 社内ポータル</title>
+<link rel="stylesheet" href="assets/portal-common.css">
+<style>
+  .viz-card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 22px 24px; margin: 22px 0; box-shadow: var(--shadow-sm); }
+  .viz-card h3 { margin: 0 0 4px; font-size: 16px; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+  .viz-card h3 .num { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: var(--accent); color: #fff; border-radius: 50%; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+  .viz-card .meta { font-size: 13px; color: var(--muted); margin: 0 0 14px; }
+  .viz-svg { display: block; width: 100%; max-width: 100%; height: auto; border-radius: 6px; }
+  .viz-tldr { background: var(--tldr-bg); border-left: 4px solid var(--tldr-border); padding: 16px 20px; border-radius: 6px; margin: 24px 0 32px; font-size: 15px; }
+  .viz-tldr strong { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<nav class="gnav">
+  <span class="gnav-brand">マキテラス</span>
+  <a href="index.html">ホーム</a>
+  <a href="overview.html">会社と事業の全体像</a>
+  <a href="image-workflow.html" class="active">画像制作フロー設計</a>
+</nav>
+
+<section class="hero">
+  <h1>画像制作フロー設計（myCelf AIX）</h1>
+  <p class="tagline">画像制作リードタイムを 1ヶ月 → 2週間 に半減する</p>
+  <div class="accent-bar"></div>
+</section>
+
+<div class="container">
+
+  <div class="crumb"><a href="index.html">ホーム</a> ／ 画像制作フロー設計</div>
+
+  <div class="viz-tldr">
+    <strong>3行でわかるmyCelf AIX：</strong>
+    画像指示書をAIで自動生成 ／
+    第1画像（チヨダヤ）と第2画像以降（シオン君チーム）の2軸体制で並列処理 ／
+    1ヶ月かかっていたリードタイムを2週間に半減する
+  </div>
+
+  <h2>① 構成図 ／ ② フロー設計 ／ ③ 画像指示書AI化 ／ ④ 指示書 実装フォーマット</h2>
+  <p>2026/04/24 マキテラスMTGを起点に、PMモードで設計・検証した画像制作フロー再設計の全体像。5/14のシオン君ヒアリング前の中間サマリ。</p>
+
+  <!-- Hero KPI -->
+  <div class="viz-card" style="background: linear-gradient(135deg, #1A3247 0%, #0d1e2e 100%); border: none; padding: 24px;">
+    <h3 style="color: white;"><span class="num" style="background: #E8641A;">★</span><span style="color: white;">最重要KPI</span></h3>
+    <p class="meta" style="color: rgba(255,255,255,0.75);">画像制作のリードタイムを大幅に短縮する</p>
+    <svg class="viz-svg" viewBox="0 0 1200 320" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="vk-shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="6" stdDeviation="10" flood-opacity="0.25"/></filter>
+        <marker id="vk-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#E8641A"/></marker>
+      </defs>
+      <g transform="translate(180,160)" filter="url(#vk-shadow)">
+        <circle cx="0" cy="0" r="120" fill="#fef2f2" stroke="#dc2626" stroke-width="5"/>
+        <text x="0" y="-50" text-anchor="middle" font-size="14" font-weight="700" fill="#991b1b" letter-spacing="3">BEFORE</text>
+        <text x="0" y="20" text-anchor="middle" font-size="64" font-weight="900" fill="#dc2626">1ヶ月</text>
+        <text x="0" y="56" text-anchor="middle" font-size="13" fill="#991b1b">FCJ案件 実測 28日</text>
+      </g>
+      <g transform="translate(600,160)">
+        <line x1="-180" y1="0" x2="180" y2="0" stroke="#E8641A" stroke-width="8" stroke-linecap="round" marker-end="url(#vk-arr)"/>
+        <rect x="-110" y="-44" width="220" height="32" rx="16" fill="#E8641A"/>
+        <text x="0" y="-22" text-anchor="middle" font-size="14" font-weight="700" fill="white" letter-spacing="3">myCelf AIX 改革</text>
+        <text x="0" y="58" text-anchor="middle" font-size="18" font-weight="700" fill="#E8641A">▲ 50%短縮</text>
+      </g>
+      <g transform="translate(1020,160)" filter="url(#vk-shadow)">
+        <circle cx="0" cy="0" r="120" fill="#dcfce7" stroke="#16a34a" stroke-width="5"/>
+        <text x="0" y="-50" text-anchor="middle" font-size="14" font-weight="700" fill="#166534" letter-spacing="3">AFTER</text>
+        <text x="0" y="20" text-anchor="middle" font-size="64" font-weight="900" fill="#16a34a">2週間</text>
+        <text x="0" y="56" text-anchor="middle" font-size="13" fill="#166534">クリティカルパス 14日</text>
+      </g>
+    </svg>
+    <p style="color: white; text-align: center; margin: 14px 0 0; font-size: 14px;">
+      <strong>画像指示書AI化</strong> ＋ <strong>2軸体制（チヨダヤ × シオン君）</strong> ＋ <strong>並列処理</strong> による達成
+    </p>
+  </div>
+
+  <!-- Design 1：構成図 -->
+  <div class="viz-card">
+    <h3><span class="num">1</span>構成図（体制）</h3>
+    <p class="meta">5プレイヤーの関係 ／ 確定（実線）と未確定（点線）の視覚的区別</p>
+    <svg class="viz-svg" viewBox="0 0 1200 820" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="v1-mc-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e8f0ff"/><stop offset="100%" stop-color="#dbeafe"/></linearGradient>
+        <filter id="v1-shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.15"/></filter>
+        <marker id="v1-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#16a34a"/></marker>
+        <marker id="v1-o" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c2410c"/></marker>
+        <marker id="v1-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7c3aed"/></marker>
+        <marker id="v1-pk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#be185d"/></marker>
+      </defs>
+      <rect width="1200" height="820" fill="#fafafa"/>
+      <g transform="translate(40,30)"><rect x="0" y="0" width="220" height="100" rx="6" fill="white" stroke="#e5e7eb"/><text x="14" y="22" font-size="12" font-weight="700" fill="#1A3247">凡例</text><line x1="14" y1="46" x2="50" y2="46" stroke="#1A3247" stroke-width="2.5"/><text x="60" y="50" font-size="12" fill="#1b1f2a">確定</text><line x1="14" y1="74" x2="50" y2="74" stroke="#7c3aed" stroke-width="2.5" stroke-dasharray="6 3"/><text x="60" y="78" font-size="12" fill="#1b1f2a">未確定（5/14決定）</text></g>
+      <g transform="translate(940,30)"><rect x="0" y="0" width="220" height="100" rx="6" fill="#16a34a" stroke="#166534" stroke-width="2"/><text x="14" y="24" font-size="11" font-weight="700" fill="white" letter-spacing="2">★ 最重要 KPI</text><text x="14" y="58" font-size="22" font-weight="700" fill="white">1ヶ月 → 2週間</text><text x="14" y="82" font-size="11" fill="white">2軸体制で並列処理を実現</text></g>
+      <g filter="url(#v1-shadow)"><rect x="430" y="50" width="340" height="100" rx="50" fill="#dcfce7" stroke="#16a34a" stroke-width="2.5"/><text x="600" y="78" text-anchor="middle" font-size="11" font-weight="700" fill="#16a34a" letter-spacing="2">CLIENT</text><text x="600" y="108" text-anchor="middle" font-size="18" font-weight="700" fill="#1b1f2a">クライアント（5社）</text><text x="600" y="132" text-anchor="middle" font-size="11" fill="#166534">アサギ／城北麺工／FCJ／島軒果樹園／Be-Seeds</text></g>
+      <g filter="url(#v1-shadow)"><rect x="320" y="270" width="560" height="200" rx="20" fill="url(#v1-mc-grad)" stroke="#1A3247" stroke-width="3.5"/><text x="600" y="304" text-anchor="middle" font-size="11" font-weight="700" fill="#1A3247" letter-spacing="2">ORCHESTRATOR</text><text x="600" y="342" text-anchor="middle" font-size="28" font-weight="700" fill="#1A3247">🎯 マキテラス</text><line x1="370" y1="358" x2="830" y2="358" stroke="#1A3247" stroke-width="0.5" opacity="0.3"/><text x="600" y="384" text-anchor="middle" font-size="13" fill="#1b1f2a">① ディレクション　② 指示書AI生成　③ 素材整理</text><text x="600" y="408" text-anchor="middle" font-size="13" fill="#1b1f2a">④ 2チーム振分け　⑤ チェック＆クライアントCB窓口</text><text x="600" y="432" text-anchor="middle" font-size="13" fill="#1b1f2a">⑥ おもてなし山形へ納品</text></g>
+      <g filter="url(#v1-shadow)"><rect x="100" y="540" width="380" height="180" rx="14" fill="#fff3eb" stroke="#c2410c" stroke-width="2.5"/><text x="290" y="568" text-anchor="middle" font-size="11" font-weight="700" fill="#c2410c" letter-spacing="2">FIRST IMAGE PARTNER</text><circle cx="290" cy="600" r="22" fill="#c2410c"/><text x="290" y="608" text-anchor="middle" font-size="20" fill="white">🎨</text><text x="290" y="650" text-anchor="middle" font-size="20" font-weight="700" fill="#c2410c">チヨダヤ</text><text x="290" y="674" text-anchor="middle" font-size="13" fill="#1b1f2a">第1画像（FV／クオリティ重視）</text><text x="290" y="700" text-anchor="middle" font-size="14" font-weight="700" fill="#c2410c">SLA：3営業日</text></g>
+      <g filter="url(#v1-shadow)"><rect x="720" y="540" width="380" height="180" rx="14" fill="#f4ebff" stroke="#7c3aed" stroke-width="3" stroke-dasharray="10 5"/><text x="910" y="568" text-anchor="middle" font-size="11" font-weight="700" fill="#7c3aed" letter-spacing="2">2ND+ PARTNER（未確定）</text><circle cx="910" cy="600" r="22" fill="#7c3aed"/><text x="910" y="608" text-anchor="middle" font-size="20" fill="white">⏳</text><text x="910" y="650" text-anchor="middle" font-size="20" font-weight="700" fill="#7c3aed">シオン君チーム</text><text x="910" y="674" text-anchor="middle" font-size="13" fill="#1b1f2a">第2〜第10画像（量産・AI画像）</text><text x="910" y="700" text-anchor="middle" font-size="13" font-weight="700" fill="#7c3aed">⚠️ 5/14ヒアリングで決定</text></g>
+      <g filter="url(#v1-shadow)"><rect x="430" y="750" width="340" height="60" rx="30" fill="#fce7f3" stroke="#be185d" stroke-width="2"/><text x="600" y="776" text-anchor="middle" font-size="11" font-weight="700" fill="#be185d" letter-spacing="2">RELAY PARTNER</text><text x="600" y="798" text-anchor="middle" font-size="14" font-weight="700" fill="#1b1f2a">🩷 おもてなし山形 → 各ポータル掲載</text></g>
+      <line x1="540" y1="150" x2="540" y2="268" stroke="#16a34a" stroke-width="2.5" marker-end="url(#v1-g)"/><text x="528" y="200" text-anchor="end" font-size="11" fill="#16a34a" font-weight="700">①素材提供</text>
+      <line x1="660" y1="268" x2="660" y2="150" stroke="#16a34a" stroke-width="2.5" marker-end="url(#v1-g)"/><text x="672" y="200" text-anchor="start" font-size="11" fill="#16a34a" font-weight="700">⑤CK依頼/CB</text>
+      <line x1="430" y1="470" x2="320" y2="538" stroke="#c2410c" stroke-width="2.5" marker-end="url(#v1-o)"/><text x="345" y="500" text-anchor="end" font-size="11" fill="#c2410c" font-weight="700">②指示書(第1)</text>
+      <line x1="770" y1="470" x2="880" y2="538" stroke="#7c3aed" stroke-width="2.5" stroke-dasharray="6 3" marker-end="url(#v1-p)"/><text x="855" y="500" text-anchor="start" font-size="11" fill="#7c3aed" font-weight="700">②指示書(第2〜)</text>
+      <line x1="280" y1="538" x2="385" y2="470" stroke="#c2410c" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#v1-o)"/><text x="200" y="510" text-anchor="start" font-size="11" fill="#c2410c" font-style="italic" font-weight="600">納品3日</text>
+      <line x1="920" y1="538" x2="815" y2="470" stroke="#7c3aed" stroke-width="2" stroke-dasharray="3 3" opacity="0.7" marker-end="url(#v1-p)"/><text x="1000" y="510" text-anchor="end" font-size="11" fill="#7c3aed" font-style="italic" font-weight="600">納品5-7日※仮</text>
+      <line x1="600" y1="470" x2="600" y2="748" stroke="#be185d" stroke-width="2.5" stroke-dasharray="6 3" marker-end="url(#v1-pk)"/><text x="612" y="610" text-anchor="start" font-size="11" fill="#be185d" font-weight="700">⑥OK→納品</text>
+    </svg>
+  </div>
+
+  <!-- Design 2：フロー設計 -->
+  <div class="viz-card">
+    <h3><span class="num">2</span>フロー設計（As-Is vs To-Be）</h3>
+    <p class="meta">17ステップ・1ヶ月 → 9ステップ・2週間 への構造転換</p>
+    <svg class="viz-svg" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+      <rect width="1200" height="800" fill="#fafafa"/>
+      <rect x="40" y="20" width="540" height="44" rx="8" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/><text x="310" y="50" text-anchor="middle" font-size="16" font-weight="700" fill="#991b1b">❌ As-Is（現状） — 17ステップ／1ヶ月</text>
+      <rect x="620" y="20" width="540" height="44" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/><text x="890" y="50" text-anchor="middle" font-size="16" font-weight="700" fill="#166534">✅ To-Be（再設計） — 9ステップ／2週間</text>
+      <g transform="translate(40,84)" font-size="11" fill="#1b1f2a">
+        <rect x="0" y="0" width="540" height="24" rx="3" fill="#fef2f2" stroke="#fecaca"/><text x="12" y="16">①素材集め1（マキテラス）</text><text x="528" y="16" text-anchor="end" fill="#991b1b" font-weight="600">3-7日</text>
+        <rect x="0" y="28" width="540" height="24" rx="3" fill="#fef2f2" stroke="#fecaca"/><text x="12" y="44">②指示書 制作中</text><text x="528" y="44" text-anchor="end" fill="#991b1b" font-weight="600">3-5日</text>
+        <rect x="0" y="56" width="540" height="24" rx="3" fill="#fef2f2" stroke="#fecaca"/><text x="12" y="72">③指示書 制作完了</text><text x="528" y="72" text-anchor="end" fill="#991b1b" font-weight="600">0-1日</text>
+        <rect x="0" y="84" width="540" height="24" rx="3" fill="#fef2f2" stroke="#fecaca"/><text x="12" y="100">④画像制作1（チヨダヤ）</text><text x="528" y="100" text-anchor="end" fill="#991b1b" font-weight="600">5-7日</text>
+        <rect x="0" y="112" width="540" height="24" rx="3" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/><text x="12" y="128" font-weight="700">⑤素材集め2（中盤発生／ボトルネック）</text><text x="528" y="128" text-anchor="end" fill="#991b1b" font-weight="700">2-5日</text>
+        <rect x="0" y="140" width="540" height="24" rx="3" fill="#fef2f2" stroke="#fecaca"/><text x="12" y="156">⑥マキテラスCK1</text><text x="528" y="156" text-anchor="end" fill="#991b1b" font-weight="600">1-2日</text>
+        <rect x="0" y="168" width="540" height="24" rx="3" fill="#fef2f2" stroke="#fecaca"/><text x="12" y="184">⑦画像制作2（CB反映）</text><text x="528" y="184" text-anchor="end" fill="#991b1b" font-weight="600">2-3日</text>
+        <rect x="0" y="196" width="540" height="24" rx="3" fill="#fef2f2" stroke="#fecaca"/><text x="12" y="212">⑧クライアントCK1</text><text x="528" y="212" text-anchor="end" fill="#991b1b" font-weight="600">2-7日</text>
+        <rect x="0" y="224" width="540" height="24" rx="3" fill="#fef2f2" stroke="#fecaca"/><text x="12" y="240">⑨画像制作3（CC反映）</text><text x="528" y="240" text-anchor="end" fill="#991b1b" font-weight="600">2-3日</text>
+        <rect x="0" y="252" width="540" height="24" rx="3" fill="#fef2f2" stroke="#fecaca"/><text x="12" y="268">⑩マキテラスCK2</text><text x="528" y="268" text-anchor="end" fill="#991b1b" font-weight="600">1-2日</text>
+        <rect x="0" y="280" width="540" height="24" rx="3" fill="#fef2f2" stroke="#fecaca"/><text x="12" y="296">⑪納品（正方形＋長方形）</text><text x="528" y="296" text-anchor="end" fill="#991b1b" font-weight="600">1-2日</text>
+        <rect x="0" y="308" width="540" height="24" rx="3" fill="#fef2f2" stroke="#fecaca"/><text x="12" y="324">⑫おもてなし山形 登録待ち</text><text x="528" y="324" text-anchor="end" fill="#991b1b" font-weight="600">1-3日</text>
+        <rect x="0" y="336" width="540" height="24" rx="3" fill="#fef2f2" stroke="#fecaca"/><text x="12" y="352">⑬全ポータル アップCK</text><text x="528" y="352" text-anchor="end" fill="#991b1b" font-weight="600">2-5日</text>
+        <rect x="0" y="364" width="540" height="24" rx="3" fill="#fef2f2" stroke="#fecaca"/><text x="12" y="380" fill="#9ca3af">⑭〜⑰：掲載確認・後修正</text><text x="528" y="380" text-anchor="end" fill="#9ca3af">—</text>
+        <rect x="0" y="408" width="540" height="48" rx="8" fill="#dc2626"/><text x="20" y="438" font-size="15" font-weight="700" fill="white">⏱ 合計実測：約1ヶ月（28日／FCJ案件）</text>
+      </g>
+      <g transform="translate(620,84)" font-size="11" fill="#1b1f2a">
+        <rect x="0" y="0" width="540" height="26" rx="3" fill="#f0fdf4" stroke="#bbf7d0"/><text x="12" y="17">①素材＆情報収集（一括）</text><text x="528" y="17" text-anchor="end" fill="#166534" font-weight="600">3日</text>
+        <rect x="0" y="32" width="540" height="26" rx="3" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/><text x="12" y="49" font-weight="700">②指示書 AI生成＋レビュー</text><text x="528" y="49" text-anchor="end" fill="#166534" font-weight="700">1日</text>
+        <rect x="0" y="68" width="266" height="48" rx="3" fill="#fff3eb" stroke="#c2410c" stroke-width="1.5"/><text x="12" y="86" font-weight="700">③a 第1画像 制作</text><text x="12" y="104" font-size="10">チヨダヤ／3営業日</text>
+        <rect x="274" y="68" width="266" height="48" rx="3" fill="#f4ebff" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="4 2"/><text x="286" y="86" font-weight="700">③b 第2〜10画像 制作（並列）</text><text x="286" y="104" font-size="10">シオン君／2-3日 ※未確定</text>
+        <rect x="0" y="124" width="540" height="26" rx="3" fill="#f0fdf4" stroke="#bbf7d0"/><text x="12" y="141">④マキテラスCK</text><text x="528" y="141" text-anchor="end" fill="#166534" font-weight="600">1日</text>
+        <rect x="0" y="156" width="540" height="26" rx="3" fill="#f0fdf4" stroke="#bbf7d0"/><text x="12" y="173">⑤クライアントCK</text><text x="528" y="173" text-anchor="end" fill="#166534" font-weight="600">2日</text>
+        <rect x="0" y="188" width="540" height="26" rx="3" fill="#f0fdf4" stroke="#bbf7d0"/><text x="12" y="205">⑥修正反映＋納品</text><text x="528" y="205" text-anchor="end" fill="#166534" font-weight="600">1日</text>
+        <rect x="0" y="220" width="540" height="26" rx="3" fill="#f0fdf4" stroke="#bbf7d0"/><text x="12" y="237">⑦おもてなし山形へデータ納品</text><text x="528" y="237" text-anchor="end" fill="#166534" font-weight="600">1日</text>
+        <rect x="0" y="252" width="540" height="26" rx="3" fill="#f0fdf4" stroke="#bbf7d0"/><text x="12" y="269">⑧ポータル掲載（SLA合意）</text><text x="528" y="269" text-anchor="end" fill="#166534" font-weight="600">3日</text>
+        <rect x="0" y="284" width="540" height="26" rx="3" fill="#f0fdf4" stroke="#bbf7d0"/><text x="12" y="301">⑨ページアップ後修正（必要時）</text><text x="528" y="301" text-anchor="end" fill="#166534" font-weight="600">2日</text>
+        <rect x="0" y="328" width="540" height="48" rx="8" fill="#16a34a"/><text x="20" y="358" font-size="15" font-weight="700" fill="white">⚡ クリティカルパス：2週間（14営業日）</text>
+        <rect x="0" y="392" width="540" height="64" rx="8" fill="#1A3247" stroke="#E8641A" stroke-width="3"/><text x="20" y="416" font-size="11" font-weight="700" fill="#E8641A" letter-spacing="2">★ 最重要 KPI</text><text x="20" y="446" font-size="22" font-weight="700" fill="white">1ヶ月 → 2週間（▲50%短縮）</text>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Design 3：画像指示書AI化 -->
+  <div class="viz-card">
+    <h3><span class="num">3</span>画像指示書AI化（パイプライン＆KPI）</h3>
+    <p class="meta">入力 → AI Skill 5ステップ → 9枚分の指示書出力 ／ 70%品質・×80倍スピード</p>
+    <svg class="viz-svg" viewBox="0 0 1200 720" xmlns="http://www.w3.org/2000/svg">
+      <rect width="1200" height="720" fill="#fafafa"/>
+      <g transform="translate(40,80)"><rect x="0" y="0" width="220" height="320" rx="14" fill="#dcfce7" stroke="#16a34a" stroke-width="2.5"/><text x="110" y="32" text-anchor="middle" font-size="12" font-weight="700" fill="#166534" letter-spacing="2">INPUT</text><text x="110" y="60" text-anchor="middle" font-size="18" font-weight="700" fill="#16a34a">📥 入力</text><line x1="20" y1="76" x2="200" y2="76" stroke="#16a34a" stroke-width="0.5" opacity="0.4"/><text x="20" y="104" font-size="13" font-weight="700" fill="#1b1f2a">📦 商品情報</text><text x="32" y="124" font-size="11" fill="#4b5563">・商品名／商品ID</text><text x="32" y="142" font-size="11" fill="#4b5563">・商品概要・スペック</text><text x="32" y="160" font-size="11" fill="#4b5563">・既存ページURL</text><text x="20" y="190" font-size="13" font-weight="700" fill="#1b1f2a">🔍 競合URL</text><text x="32" y="210" font-size="11" fill="#4b5563">・楽天競合 2-3本</text><text x="32" y="228" font-size="11" fill="#4b5563">・参考画像URL</text><text x="20" y="258" font-size="13" font-weight="700" fill="#1b1f2a">🏢 企業情報</text><text x="32" y="278" font-size="11" fill="#4b5563">・ブランドストーリー</text><text x="32" y="296" font-size="11" fill="#4b5563">・企業のこだわり</text></g>
+      <text x="280" y="245" font-size="36" fill="#1A3247" font-weight="300">→</text>
+      <g transform="translate(330,40)"><rect x="0" y="0" width="540" height="420" rx="14" fill="#e8f0ff" stroke="#1A3247" stroke-width="3"/><text x="270" y="32" text-anchor="middle" font-size="12" font-weight="700" fill="#1A3247" letter-spacing="2">AI SKILL</text><text x="270" y="62" text-anchor="middle" font-size="20" font-weight="700" fill="#1A3247">⚙️ makiteras-image-prompt v1.0</text><text x="270" y="84" text-anchor="middle" font-size="11" fill="#4b5563">坂巻社長メソッド準拠（楽天競合調査・キーワード戦略・20%ルール）</text><line x1="40" y1="100" x2="500" y2="100" stroke="#1A3247" stroke-width="0.5" opacity="0.3"/>
+        <g font-size="11" fill="#1b1f2a">
+          <rect x="40" y="118" width="460" height="46" rx="6" fill="#fff" stroke="#1A3247" stroke-width="1"/><circle cx="68" cy="141" r="16" fill="#E8641A"/><text x="68" y="146" text-anchor="middle" font-size="13" font-weight="700" fill="white">1</text><text x="94" y="138" font-weight="700">制作枚数の確認</text><text x="94" y="156" font-size="10" fill="#4b5563">最初に必ず質問。第1画像はチヨダヤ担当のため除外</text>
+          <rect x="40" y="174" width="460" height="46" rx="6" fill="#fff" stroke="#1A3247" stroke-width="1"/><circle cx="68" cy="197" r="16" fill="#E8641A"/><text x="68" y="202" text-anchor="middle" font-size="13" font-weight="700" fill="white">2</text><text x="94" y="194" font-weight="700">案件の基本情報</text><text x="94" y="212" font-size="10" fill="#4b5563">事業者コード・商品ID・新規/既存・納期</text>
+          <rect x="40" y="230" width="460" height="46" rx="6" fill="#fff" stroke="#1A3247" stroke-width="1"/><circle cx="68" cy="253" r="16" fill="#E8641A"/><text x="68" y="258" text-anchor="middle" font-size="13" font-weight="700" fill="white">3</text><text x="94" y="250" font-weight="700">商品情報</text><text x="94" y="268" font-size="10" fill="#4b5563">スペック・価格帯・既存ページURL</text>
+          <rect x="40" y="286" width="460" height="46" rx="6" fill="#fff8e6" stroke="#c9a227" stroke-width="1.5"/><circle cx="68" cy="309" r="16" fill="#c9a227"/><text x="68" y="314" text-anchor="middle" font-size="13" font-weight="700" fill="white">4</text><text x="94" y="306" font-weight="700">🔍 楽天競合調査（坂巻メソッド）</text><text x="94" y="324" font-size="10" fill="#92400e">9項目：KW戦略／競合分析／20%ルール／ターゲット／著作権 等</text>
+          <rect x="40" y="342" width="460" height="46" rx="6" fill="#fff" stroke="#1A3247" stroke-width="1"/><circle cx="68" cy="365" r="16" fill="#E8641A"/><text x="68" y="370" text-anchor="middle" font-size="13" font-weight="700" fill="white">5</text><text x="94" y="362" font-weight="700">企業情報</text><text x="94" y="380" font-size="10" fill="#4b5563">ブランドストーリー・こだわり・差別化要素</text>
+        </g>
+        <text x="270" y="408" text-anchor="middle" font-size="11" fill="#4b5563" font-style="italic">SKILL.md 508行 / 17行動原則</text>
+      </g>
+      <text x="890" y="245" font-size="36" fill="#1A3247" font-weight="300">→</text>
+      <g transform="translate(940,80)"><rect x="0" y="0" width="220" height="320" rx="14" fill="#f4ebff" stroke="#7c3aed" stroke-width="2.5"/><text x="110" y="32" text-anchor="middle" font-size="12" font-weight="700" fill="#7c3aed" letter-spacing="2">OUTPUT</text><text x="110" y="60" text-anchor="middle" font-size="18" font-weight="700" fill="#7c3aed">📤 出力</text><line x1="20" y1="76" x2="200" y2="76" stroke="#7c3aed" stroke-width="0.5" opacity="0.4"/><text x="20" y="104" font-size="13" font-weight="700" fill="#1b1f2a">📋 第1画像 方向性</text><text x="32" y="124" font-size="11" fill="#4b5563">→ 千田屋共有用</text><text x="20" y="156" font-size="13" font-weight="700" fill="#1b1f2a">🖼 第2〜第10画像</text><text x="32" y="176" font-size="11" fill="#4b5563">指示書（最大9枚分）</text><text x="32" y="194" font-size="11" fill="#4b5563">・事前情報＋本文</text><text x="32" y="212" font-size="11" fill="#4b5563">・参考URL（個別）</text><text x="32" y="230" font-size="11" fill="#4b5563">・掲載要素・アイコン</text><text x="20" y="262" font-size="13" font-weight="700" fill="#1b1f2a">✅ チェックサマリ</text><text x="32" y="282" font-size="11" fill="#4b5563">マキテラス用</text><text x="32" y="300" font-size="11" fill="#4b5563">許可取りフラグ</text></g>
+      <g transform="translate(40,510)"><rect x="0" y="0" width="1120" height="160" rx="12" fill="#1A3247"/><text x="560" y="32" text-anchor="middle" font-size="14" font-weight="700" fill="white" letter-spacing="2">テスト結果（アサギFY23-190 で実証）</text>
+        <g transform="translate(40,60)"><rect x="0" y="0" width="320" height="76" rx="8" fill="#E8641A"/><text x="20" y="28" font-size="12" font-weight="700" fill="white" letter-spacing="2">★ 最重要KPIに直結</text><text x="20" y="60" font-size="26" font-weight="700" fill="white">1ヶ月 → 2週間</text></g>
+        <g transform="translate(400,60)"><text x="0" y="36" font-size="34" font-weight="700" fill="#E8641A">70%</text><text x="0" y="62" font-size="12" fill="white">品質達成度</text></g>
+        <g transform="translate(580,60)"><text x="0" y="36" font-size="34" font-weight="700" fill="#E8641A">×80倍</text><text x="0" y="62" font-size="12" fill="white">指示書生成スピード</text></g>
+        <g transform="translate(800,60)"><text x="0" y="36" font-size="34" font-weight="700" fill="#E8641A">9枚</text><text x="0" y="62" font-size="12" fill="white">一括生成</text></g>
+        <g transform="translate(950,60)"><text x="0" y="36" font-size="34" font-weight="700" fill="#E8641A">7項目</text><text x="0" y="62" font-size="12" fill="white">v1.1改善提案</text></g>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Design 4：指示書 実装フォーマット -->
+  <div class="viz-card">
+    <h3><span class="num">4</span>指示書 実装フォーマット（FMT準拠 Excel）</h3>
+    <p class="meta">既存FMTのタブ構成完全踏襲＋視認性大幅改善（v1→v2）</p>
+    <svg class="viz-svg" viewBox="0 0 1200 880" xmlns="http://www.w3.org/2000/svg">
+      <rect width="1200" height="880" fill="#fafafa"/>
+      <g transform="translate(40,30)"><rect x="0" y="0" width="1120" height="56" rx="8" fill="#1A3247"/><text x="20" y="36" font-size="15" font-weight="700" fill="white">📊 20260630_FY23-190_画像制作シート_v2.xlsx</text><text x="1100" y="36" text-anchor="end" font-size="12" fill="#9ca3af">13シート構成</text></g>
+      <g transform="translate(40,108)"><text x="0" y="0" font-size="14" font-weight="700" fill="#1A3247">📑 シート構成（13タブ）</text>
+        <g transform="translate(0,18)" font-size="11" fill="#1b1f2a">
+          <rect x="0" y="0" width="100" height="40" rx="4" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/><text x="50" y="24" text-anchor="middle">📘 使い方</text>
+          <rect x="106" y="0" width="100" height="40" rx="4" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/><text x="156" y="24" text-anchor="middle">📋 全体</text>
+          <rect x="212" y="0" width="100" height="40" rx="4" fill="#fff3eb" stroke="#c2410c" stroke-width="1.5"/><text x="262" y="24" text-anchor="middle">🎨 第1画像</text>
+          <rect x="318" y="0" width="100" height="40" rx="4" fill="#f4ebff" stroke="#7c3aed" stroke-width="1.5"/><text x="368" y="24" text-anchor="middle">📷 PR画像</text>
+          <rect x="424" y="0" width="100" height="40" rx="4" fill="#f4ebff" stroke="#7c3aed" stroke-width="1.5"/><text x="474" y="24" text-anchor="middle">📷 1回目</text>
+          <rect x="530" y="0" width="100" height="40" rx="4" fill="#f4ebff" stroke="#7c3aed" stroke-width="1.5"/><text x="580" y="24" text-anchor="middle">📷 2回目</text>
+          <rect x="636" y="0" width="100" height="40" rx="4" fill="#f4ebff" stroke="#7c3aed" stroke-width="1.5"/><text x="686" y="24" text-anchor="middle">📷 3回目</text>
+          <rect x="742" y="0" width="130" height="40" rx="4" fill="#f4ebff" stroke="#7c3aed" stroke-width="1.5"/><text x="807" y="24" text-anchor="middle">📷 企業のこだわり</text>
+          <rect x="878" y="0" width="160" height="40" rx="4" fill="#f4ebff" stroke="#7c3aed" stroke-width="1.5"/><text x="958" y="24" text-anchor="middle">📷 企業アドバンテージ</text>
+        </g>
+        <g transform="translate(0,68)" font-size="11" fill="#1b1f2a">
+          <rect x="0" y="0" width="120" height="40" rx="4" fill="#f4ebff" stroke="#7c3aed" stroke-width="1.5"/><text x="60" y="24" text-anchor="middle">📷 企業紹介</text>
+          <rect x="126" y="0" width="140" height="40" rx="4" fill="#f4ebff" stroke="#7c3aed" stroke-width="1.5"/><text x="196" y="24" text-anchor="middle">📷 お召し上がり方</text>
+          <rect x="272" y="0" width="120" height="40" rx="4" fill="#f4ebff" stroke="#7c3aed" stroke-width="1.5"/><text x="332" y="24" text-anchor="middle">📷 お届け内容</text>
+          <rect x="398" y="0" width="100" height="40" rx="4" fill="#f5f5f3" stroke="#9ca3af" stroke-width="1.5"/><text x="448" y="24" text-anchor="middle">📋 コピー用</text>
+        </g>
+      </g>
+      <g transform="translate(40,260)"><text x="0" y="0" font-size="14" font-weight="700" fill="#1A3247">🔍 各画像シートの構造（v2 視認性改善版）</text>
+        <g transform="translate(0,18)">
+          <rect x="0" y="0" width="540" height="42" rx="4" fill="#1A3247"/><text x="20" y="28" font-size="13" font-weight="700" fill="white">📷 PR画像 ／ 商品ストーリー・こだわり訴求</text>
+          <rect x="0" y="50" width="540" height="30" rx="3" fill="#E8641A"/><text x="20" y="70" font-size="12" font-weight="700" fill="white">🏷 画像情報</text><rect x="0" y="84" width="540" height="40" rx="3" fill="#fff" stroke="#e5e7eb"/><text x="20" y="108" font-size="11" fill="#1b1f2a">画像No. ／ サイズ ／ 既存・新規 ／ URL</text>
+          <rect x="0" y="132" width="540" height="30" rx="3" fill="#E8641A"/><text x="20" y="152" font-size="12" font-weight="700" fill="white">📝 指示書 — 事前情報＆本文構成</text><rect x="0" y="166" width="540" height="40" rx="3" fill="#fff" stroke="#e5e7eb"/><text x="20" y="190" font-size="11" fill="#1b1f2a">【目的】＋【本文構成】（核心コンテンツ）</text>
+          <rect x="0" y="214" width="540" height="30" rx="3" fill="#E8641A"/><text x="20" y="234" font-size="12" font-weight="700" fill="white">📂 素材・参考URL</text><rect x="0" y="248" width="540" height="36" rx="3" fill="#fff" stroke="#e5e7eb"/><text x="20" y="270" font-size="11" fill="#1b1f2a">写真ありかURL ／ 参考URL（各画像個別2本）</text>
+          <rect x="0" y="292" width="540" height="30" rx="3" fill="#E8641A"/><text x="20" y="312" font-size="12" font-weight="700" fill="white">🎨 画像指示・掲載要素</text><rect x="0" y="326" width="540" height="36" rx="3" fill="#fff" stroke="#e5e7eb"/><text x="20" y="348" font-size="11" fill="#1b1f2a">挿入テキスト ／ アイコン・要素一覧</text>
+          <rect x="0" y="370" width="540" height="30" rx="3" fill="#dc2626"/><text x="20" y="390" font-size="12" font-weight="700" fill="white">✅ マキテラスチェック項目</text><rect x="0" y="404" width="540" height="36" rx="3" fill="#fff" stroke="#e5e7eb"/><text x="20" y="426" font-size="11" fill="#1b1f2a">観点／詳細／チェック日／備考（4列）</text>
+          <rect x="0" y="448" width="540" height="30" rx="3" fill="#c9a227"/><text x="20" y="468" font-size="12" font-weight="700" fill="white">✏️ チヨダヤ様 記入欄</text><rect x="0" y="482" width="540" height="36" rx="3" fill="#fff" stroke="#e5e7eb"/><text x="20" y="504" font-size="11" fill="#1b1f2a">作業開始日／完了日／修正対応①②（4列）</text>
+        </g>
+      </g>
+      <g transform="translate(620,260)"><text x="0" y="0" font-size="14" font-weight="700" fill="#1A3247">✨ v1 → v2 視認性改善ポイント</text>
+        <g transform="translate(0,18)">
+          <rect x="0" y="0" width="540" height="540" rx="10" fill="#fff8e6" stroke="#c9a227" stroke-width="2"/>
+          <g transform="translate(24,42)" font-size="12">
+            <text x="0" y="0" font-size="14" font-weight="700" fill="#92400e">列構成</text><text x="0" y="22" fill="#1b1f2a">8列ぎちぎち → 4列シンプル（22/60/32/28）</text>
+            <text x="0" y="62" font-size="14" font-weight="700" fill="#92400e">セクションヘッダー</text><text x="0" y="84" fill="#1b1f2a">薄色 → オレンジ太帯で明確に分離</text>
+            <text x="0" y="124" font-size="14" font-weight="700" fill="#92400e">タイトル</text><text x="0" y="146" fill="#1b1f2a">普通の見出し → ネイビー＋白文字＋大型</text>
+            <text x="0" y="186" font-size="14" font-weight="700" fill="#92400e">フォント</text><text x="0" y="208" fill="#1b1f2a">Arial → メイリオ（日本語可読性UP）</text>
+            <text x="0" y="248" font-size="14" font-weight="700" fill="#92400e">チェック項目</text><text x="0" y="270" fill="#1b1f2a">右側に押し込み → 下部に独立テーブル</text>
+            <text x="0" y="310" font-size="14" font-weight="700" fill="#92400e">ペーン固定</text><text x="0" y="332" fill="#1b1f2a">なし → タイトル行を固定（スクロール時も）</text>
+            <text x="0" y="372" font-size="14" font-weight="700" fill="#92400e">配色</text><text x="0" y="394" fill="#1b1f2a">カラフル過剰 → 5色に絞ったプロ仕様</text>
+            <text x="0" y="434" font-size="14" font-weight="700" fill="#92400e">行高</text><text x="0" y="456" fill="#1b1f2a">自動 → コンテンツ量に応じて動的設定</text>
+          </g>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <h2>📌 5/14シオン君ヒアリングまでに進めること</h2>
+  <table class="stake-table">
+    <thead><tr><th>日付</th><th>アクション</th><th>担当</th></tr></thead>
+    <tbody>
+      <tr><td>4/28（火）</td><td>本構成図 v2.0（仮置き）を坂巻さんに共有 → 5/14MTG方針を確認</td><td>Yohei</td></tr>
+      <tr><td>5/2まで</td><td>5/14MTG用資料を準備（本構成図＋指示書サンプル＋ヒアリング項目）</td><td>Yohei</td></tr>
+      <tr><td>5/7週</td><td>シオン君に事前資料を共有</td><td>Yohei</td></tr>
+      <tr><td><strong>5/14（木）</strong></td><td><strong>シオン君ヒアリングMTG実施</strong>（対応可否・契約形態・SLA・トライアル合意）</td><td><strong>坂巻・井上</strong></td></tr>
+      <tr><td>5/15〜5/16</td><td>ヒアリング結果を反映した構成図 v2.1（確定版）を作成 → 矢印を実線に</td><td>Yohei</td></tr>
+      <tr><td>5/19週</td><td>千田屋への2軸体制説明MTGをセット</td><td>Yohei・坂巻</td></tr>
+      <tr><td>5/末〜6月</td><td>新フロー試験運用（1〜2案件で実測）</td><td>全員</td></tr>
+    </tbody>
+  </table>
+
+</div>
+
+<footer class="site-footer">
+  株式会社マキテラス ・ 社内ポータル ・ 画像制作フロー設計 ・ 最終更新 2026-04-25
+</footer>
+
+</body>
+</html>
