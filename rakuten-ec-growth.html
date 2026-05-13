@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>楽天ECグロース DB｜株式会社マキテラス 社内ポータル</title>
+<style>
+/* ===== Portal Common（portal-common.css 相当を内包） ===== */
+:root{
+  --primary:#1A3247; --primary-ink:#fff; --accent:#E8641A;
+  --ink:#1b1f2a; --ink-soft:#4b5563; --muted:#6b7280;
+  --line:#e5e7eb; --bg:#f7f7f5; --card:#fff;
+  --tldr-bg:#fff5f0; --tldr-border:#E8641A;
+  --focus-bg:#fff8e6; --focus-border:#c9a227;
+  --ok:#15803d; --ok-bg:#dcfce7;
+  --warn:#b45309; --warn-bg:#fef3c7;
+  --bad:#b91c1c; --bad-bg:#fee2e2;
+  --radius:10px;
+  --shadow-sm:0 1px 2px rgba(15,23,42,.06);
+  --shadow-md:0 6px 20px rgba(15,23,42,.08);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI","Hiragino Sans","Noto Sans JP",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* Sticky nav */
+.gnav{position:sticky;top:0;z-index:50;background:var(--primary);color:var(--primary-ink);padding:10px 20px;display:flex;gap:18px;align-items:center;box-shadow:var(--shadow-sm);font-size:14px;flex-wrap:wrap}
+.gnav .gnav-brand{font-weight:700;letter-spacing:.02em;margin-right:8px}
+.gnav a{color:var(--primary-ink);opacity:.85;padding:4px 8px;border-radius:6px;transition:background .12s,opacity .12s}
+.gnav a:hover{opacity:1;background:rgba(255,255,255,.08);text-decoration:none}
+.gnav a.active{background:rgba(255,255,255,.14);opacity:1}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,var(--primary),#0d1e2e);color:var(--primary-ink);padding:54px 24px;text-align:center}
+.hero h1{color:var(--primary-ink);margin:0 0 12px;font-size:30px;letter-spacing:.01em}
+.hero .tagline{color:rgba(255,255,255,.85);margin:0;font-size:16px}
+.hero .accent-bar{display:inline-block;width:48px;height:4px;background:var(--accent);border-radius:2px;margin:16px 0 0}
+
+/* Container */
+.container{max-width:1100px;margin:0 auto;padding:34px 24px 80px}
+.crumb{font-size:13px;color:var(--muted);margin-bottom:12px}
+.crumb a{color:var(--muted)}
+h1,h2,h3,h4{color:var(--ink);line-height:1.35;margin-top:0}
+h2{font-size:22px;border-left:4px solid var(--accent);padding-left:12px;margin:40px 0 16px;display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+h2 .right{font-size:12px;color:var(--muted);font-weight:500}
+h3{font-size:17px;margin:24px 0 10px}
+p{margin:0 0 1em}
+
+/* TL;DR */
+.tldr{background:var(--tldr-bg);border-left:4px solid var(--tldr-border);padding:16px 20px;border-radius:6px;margin:18px 0 28px;font-size:15px}
+.tldr strong{color:var(--accent)}
+
+/* Goal grid (numbers) */
+.goal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:14px 0}
+.goal{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);border-top:3px solid var(--accent);padding:18px;text-align:center}
+.goal .goal-num{font-size:24px;font-weight:700;color:var(--accent);display:block;margin-bottom:4px}
+.goal .goal-label{font-size:12px;color:var(--ink-soft);letter-spacing:.04em}
+.goal .goal-sub{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* Card grid */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px;margin:18px 0 28px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow-sm);transition:transform .12s,box-shadow .12s;display:flex;flex-direction:column}
+.card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.card h3{margin-top:0;color:var(--primary);font-size:18px}
+.card p{color:var(--ink-soft);font-size:14px;margin-bottom:0}
+.card .card-meta{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;background:#fff5f0;color:var(--accent);margin-bottom:10px;font-weight:600;border:1px solid #fbd5c0}
+.card .card-meta.muted{background:#f1f5f9;color:var(--muted);border-color:#cbd5e1}
+.card .card-meta.ok{background:var(--ok-bg);color:var(--ok);border-color:#86efac}
+.card .stats{margin:8px 0;font-size:13px;border-top:1px dashed var(--line);padding-top:8px}
+.card .stats div{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px dashed var(--line)}
+.card .stats div:last-child{border-bottom:0}
+.card .stats .l{color:var(--ink-soft)}
+.card .stats .v{font-weight:600;font-variant-numeric:tabular-nums}
+.card .next{margin-top:10px;padding:10px;background:#fff8e6;border:1px solid #f3d999;border-radius:6px;font-size:12px}
+.card .next .lbl{color:var(--focus-border);font-size:10px;letter-spacing:.08em;font-weight:700}
+.card .next .txt{color:var(--ink);margin-top:2px}
+.card .btn-row{margin-top:auto;padding-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+.btn-link{display:inline-block;font-size:13px;color:var(--accent);font-weight:600;padding:4px 0;border-bottom:1px solid transparent}
+.btn-link:hover{border-bottom-color:var(--accent);text-decoration:none}
+.btn-out{display:inline-block;font-size:12px;color:var(--ink-soft);padding:4px 10px;background:#fff;border:1px solid var(--line);border-radius:999px}
+.btn-out:hover{border-color:var(--accent);color:var(--accent);text-decoration:none}
+
+/* Table */
+.stake-table{width:100%;border-collapse:collapse;margin:14px 0;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.stake-table th,.stake-table td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:top}
+.stake-table th{background:var(--bg);font-weight:600;color:var(--ink-soft)}
+.stake-table tr:last-child td{border-bottom:0}
+.stake-table td.num{text-align:right;font-variant-numeric:tabular-nums}
+.stake-table .delta-up{color:var(--ok);font-weight:600}
+.stake-table .delta-down{color:var(--bad);font-weight:600}
+
+/* Pills */
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;background:#fff5f0;color:var(--accent);border:1px solid #fbd5c0;margin-right:4px}
+.pill.muted{background:#f1f5f9;color:var(--muted);border-color:#cbd5e1}
+.pill.ok{background:var(--ok-bg);color:var(--ok);border-color:#86efac}
+.pill.warn{background:var(--warn-bg);color:var(--warn);border-color:#fcd34d}
+.pill.bad{background:var(--bad-bg);color:var(--bad);border-color:#fca5a5}
+
+/* Bar chart (horizontal) */
+.bar-chart{margin:10px 0}
+.bar-line{display:grid;grid-template-columns:90px 1fr 130px;gap:10px;align-items:center;padding:5px 0;font-size:13px}
+.bar-line .lbl{color:var(--ink-soft);font-size:12px}
+.bar-line .v{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;font-size:12px}
+.bar-track{background:#eef2f6;height:18px;border-radius:9px;overflow:hidden;position:relative}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),#f59e0b);border-radius:9px;transition:width .4s}
+.bar-fill.dim{background:linear-gradient(90deg,#94a3b8,#cbd5e1)}
+.bar-fill.peak{background:linear-gradient(90deg,#0f766e,#0891b2)}
+
+/* Ranking */
+.rank-row{display:grid;grid-template-columns:36px 1fr 130px 70px 110px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.rank-row .pos{font-size:20px;font-weight:700;color:var(--accent);text-align:center;font-variant-numeric:tabular-nums}
+.rank-row .nm{color:var(--ink)}
+.rank-row .nm .sm{font-size:11px;color:var(--muted);margin-top:2px}
+.rank-row .v{text-align:right;font-variant-numeric:tabular-nums}
+.rank-row .v.sm{font-size:11px;color:var(--muted)}
+.rank-row.head{font-weight:600;color:var(--ink-soft);font-size:12px;border-bottom:2px solid var(--ink)}
+
+/* Roadmap timeline */
+.roadmap{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:18px 0}
+.roadmap .step{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:var(--radius);padding:14px;font-size:13px}
+.roadmap .step .yr{font-weight:700;color:var(--primary);display:block;margin-bottom:4px;font-size:13px}
+.roadmap .step .desc{color:var(--ink-soft);font-size:12.5px}
+
+/* Strategy grid */
+.strategy{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:12px 0}
+.strategy .it{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px}
+.strategy .it .n{display:inline-block;width:24px;height:24px;line-height:24px;text-align:center;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;font-size:13px;margin-bottom:6px}
+.strategy .it .t{font-weight:700;font-size:14px;color:var(--primary);margin-bottom:4px}
+.strategy .it .d{font-size:12.5px;color:var(--ink-soft)}
+
+/* Focus banner */
+.focus-strip{background:var(--focus-bg);border:1px solid var(--focus-border);border-radius:var(--radius);padding:16px 20px;margin:18px 0}
+.focus-strip .focus-label{display:inline-block;font-size:11px;letter-spacing:.14em;font-weight:700;color:var(--focus-border);margin-bottom:6px}
+.focus-strip h3{margin:0 0 6px;font-size:17px;color:var(--ink)}
+.focus-strip p{margin:0;font-size:14px;color:var(--ink-soft)}
+
+/* Coming soon list */
+.coming{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;font-size:12.5px;margin:10px 0}
+.coming .it{padding:8px 12px;background:#fff;border:1px dashed var(--line);border-radius:6px;color:var(--ink-soft)}
+.coming .it strong{color:var(--ink)}
+
+/* Footer */
+.site-footer{border-top:1px solid var(--line);padding:20px 0;margin-top:40px;text-align:center;font-size:13px;color:var(--muted)}
+
+@media (max-width:720px){
+  .gnav{gap:8px;font-size:13px;padding:8px 14px}
+  .container{padding:24px 14px 60px}
+  .hero{padding:38px 16px}
+  .hero h1{font-size:24px}
+  .rank-row{grid-template-columns:30px 1fr 100px 60px;gap:8px;font-size:12px}
+  .rank-row .pos{font-size:16px}
+  .rank-row .v.wow{display:none}
+  .bar-line{grid-template-columns:70px 1fr 110px}
+}
+</style>
+</head>
+<body>
+
+<nav class="gnav">
+  <span class="gnav-brand">マキテラス</span>
+  <a href="index.html">ホーム</a>
+  <a href="overview.html">会社と事業の全体像</a>
+  <a href="image-workflow.html">画像制作フロー設計</a>
+  <a href="rakuten-ec-growth.html" class="active">楽天ECグロースDB</a>
+</nav>
+
+<section class="hero">
+  <h1>楽天ECグロース DB</h1>
+  <p class="tagline">楽天ふるさと納税の検索順位アップ × 月次寄付額最大化 ／ 担当事業者の横断ダッシュボード</p>
+  <div class="accent-bar"></div>
+</section>
+
+<div class="container">
+
+  <div class="crumb">
+    <a href="index.html">ホーム</a> ／ 楽天ECグロース DB
+  </div>
+
+  <!-- TL;DR -->
+  <div class="tldr">
+    <strong>3行でわかる楽天ECグロースDB：</strong> 5/8 楽天検索対策MTG（坂巻亜矢子社長）を起点に、担当事業者の楽天ふるさと納税ページを横断的にグロースさせるためのPMダッシュボード ／
+    アサギ（詳細プランあり）・城北麺工・島軒果樹園を皮切りに、マキテラス事業者を順次カード化していく ／
+    共通戦略は <strong>製品情報入力 → ジャンル確認 → 商品名/キャッチ最適化 → 毎日コツコツ更新</strong> の4手順。
+  </div>
+
+  <!-- ============== ① 全体KPI ============== -->
+  <h2>① 全体KPIサマリ<span class="right">基準日：2026/5/13</span></h2>
+
+  <div class="goal-grid">
+    <div class="goal">
+      <span class="goal-num">1 / 3</span>
+      <span class="goal-label">プラン進行中事業者</span>
+      <div class="goal-sub">アサギ（詳細）／城北麺工・島軒は今後</div>
+    </div>
+    <div class="goal">
+      <span class="goal-num">¥59.96M</span>
+      <span class="goal-label">山形市RMS 5月累計（5/1-5/12）</span>
+      <div class="goal-sub">前月比 +60% ／ 前年比 +25%</div>
+    </div>
+    <div class="goal">
+      <span class="goal-num">12.65%</span>
+      <span class="goal-label">山形市RMS 転換率</span>
+      <div class="goal-sub">前月比 +17% ／ 前年比 +22%</div>
+    </div>
+    <div class="goal">
+      <span class="goal-num">110＋103件</span>
+      <span class="goal-label">RMS 改修対象（楽天サーチ判定）</span>
+      <div class="goal-sub">アクセス改善110 ／ 転換改善103（全5,073商品中）</div>
+    </div>
+  </div>
+
+  <p style="font-size:12px;color:var(--muted);margin-top:-6px">※ KPIは山形県山形市RMSアカウント（おもてなし山形・全事業者共用）の数値。事業者別KPIは各カードを参照。</p>
+
+  <!-- ============== ② 共通戦略 ============== -->
+  <h2>② 5/8 楽天検索対策MTG 共通戦略</h2>
+  <p style="font-size:14px;color:var(--ink-soft);margin-bottom:12px">坂巻社長から共有された、費用をかけずに検索順位を上げる方針。<strong>全事業者カードに横展開する共通戦略</strong>。</p>
+
+  <div class="strategy">
+    <div class="it">
+      <span class="n">1</span>
+      <div class="t">製品情報タブを埋める</div>
+      <div class="d">商品仕様（ブランド・サイズ・原産国・素材・重量）を必須項目から。検索結果で「600g」「1gあたり寄付単価」が表示され差別化。</div>
+    </div>
+    <div class="it">
+      <span class="n">2</span>
+      <div class="t">ジャンルIDの正確性</div>
+      <div class="d">間違ったジャンルが設定されていることがある。製品情報入力時に必ず確認・修正。</div>
+    </div>
+    <div class="it">
+      <span class="n">3</span>
+      <div class="t">商品名＋キャッチコピー最適化</div>
+      <div class="d">トレンドKW（楽天サジェスト＋関連KW・ユーザトレンド分析）を商品名＋キャッチに反映。スパムは避ける。</div>
+    </div>
+    <div class="it">
+      <span class="n">4</span>
+      <div class="t">毎日コツコツ更新</div>
+      <div class="d">1日1項目でも更新するとアルゴリズム上で順位が上がる。1文字変更でも更新と見なされる。</div>
+    </div>
+  </div>
+
+  <div class="focus-strip">
+    <span class="focus-label">v2 実機特定</span>
+    <h3>議事録で「未特定」だった「関連キーワード」入力欄の正体</h3>
+    <p>商品編集UIには独立した入力欄は <strong>存在しない</strong>。実態は <strong>キャッチコピー欄（全角87文字）にKWを並べる方式</strong> ＋
+    分析ツール <strong>R-Karte ＞ アクセス・流入分析 ＞ 楽天サーチ ＞ 関連キーワード・ユーザトレンド</strong>で「ふるさと納税 ◯◯」と一緒に検索されるKWを吸い上げる設計。
+    （5/13に井上がRMS実機で検証済）</p>
+  </div>
+
+  <!-- ============== ③ 売れ行きランキング ============== -->
+  <h2>③ 担当事業者 売れ行き返礼品ランキング<span class="right">出典：管理シート＋LedgHOME＋RMS</span></h2>
+
+  <div class="rank-row head">
+    <div class="pos">#</div><div class="nm">返礼品 / 事業者</div><div class="v">寄付金額</div><div class="v">件数</div><div class="v wow">傾向</div>
+  </div>
+
+  <div class="rank-row">
+    <div class="pos">1</div>
+    <div class="nm">訳ありシャインマスカット 1kg <span class="pill ok">島軒果樹園</span>
+      <div class="sm">yo067-012 ／ R7累計の主力</div>
+    </div>
+    <div class="v">¥38.99M<div class="v sm">R7累計</div></div>
+    <div class="v">4,210</div>
+    <div class="v wow"><span class="pill ok">R7→R8 22x</span></div>
+  </div>
+
+  <div class="rank-row">
+    <div class="pos">2</div>
+    <div class="nm">【ねむりFit】グッスリ枕 FZ23-198 <span class="pill">アサギ</span>
+      <div class="sm">看板商品 ／ 転換率3.09%</div>
+    </div>
+    <div class="v">¥1.18M<div class="v sm">RMS累計</div></div>
+    <div class="v">80</div>
+    <div class="v wow"><span class="pill bad">3月-54.6%</span></div>
+  </div>
+
+  <div class="rank-row">
+    <div class="pos">3</div>
+    <div class="nm">訳ありシャインマスカット 2kg <span class="pill ok">島軒果樹園</span>
+      <div class="sm">yo067-013 ／ R8新規</div>
+    </div>
+    <div class="v">-<div class="v sm">R8仕込中</div></div>
+    <div class="v">0／602</div>
+    <div class="v wow"><span class="pill warn">R8予約</span></div>
+  </div>
+
+  <div class="rank-row">
+    <div class="pos">4</div>
+    <div class="nm">羽毛布団NGL シングル FY23-190 <span class="pill">アサギ</span>
+      <div class="sm">高単価 ／ 隠れエース</div>
+    </div>
+    <div class="v">¥180K</div>
+    <div class="v">2</div>
+    <div class="v wow"><span class="pill ok">転換率3.57%</span></div>
+  </div>
+
+  <div class="rank-row">
+    <div class="pos">5</div>
+    <div class="nm">ナガノパープル 1kg <span class="pill ok">島軒果樹園</span>
+      <div class="sm">yo067-016 ／ 秋需要</div>
+    </div>
+    <div class="v">-<div class="v sm">R8仕込中</div></div>
+    <div class="v">0／246</div>
+    <div class="v wow"><span class="pill warn">秋需要</span></div>
+  </div>
+
+  <p style="font-size:12px;color:var(--muted);margin-top:8px">※ アサギ＝楽天RMS数値、島軒＝LedgHOME（レジホーム）から取得。城北麺工はデータ取得待ち。WoW（週次変化）は取得可能な事業者のみ表示予定。次バージョンで楽天RMSの週次CSV自動取り込みを設計中。</p>
+
+  <!-- ============== ④ 月次推移 ============== -->
+  <h2>④ 事業者別 月次・年度推移<span class="right">アサギ＝月次／島軒＝年度サマリ</span></h2>
+
+  <h3>アサギ株式会社（FY2025 月次・楽天＋ふるなび＋チョイス合算）</h3>
+  <div class="bar-chart">
+    <div class="bar-line"><div class="lbl">2025-04</div><div class="bar-track"><div class="bar-fill dim" style="width:0%"></div></div><div class="v">¥0</div></div>
+    <div class="bar-line"><div class="lbl">2025-05</div><div class="bar-track"><div class="bar-fill" style="width:47%"></div></div><div class="v">¥194K</div></div>
+    <div class="bar-line"><div class="lbl">2025-06</div><div class="bar-track"><div class="bar-fill dim" style="width:27%"></div></div><div class="v">¥112K</div></div>
+    <div class="bar-line"><div class="lbl">2025-07</div><div class="bar-track"><div class="bar-fill" style="width:54%"></div></div><div class="v">¥222K</div></div>
+    <div class="bar-line"><div class="lbl">2025-08</div><div class="bar-track"><div class="bar-fill peak" style="width:100%"></div></div><div class="v">¥407K  <span class="pill ok">ピーク</span></div></div>
+    <div class="bar-line"><div class="lbl">2026-03</div><div class="bar-track"><div class="bar-fill dim" style="width:13%"></div></div><div class="v">¥54K</div></div>
+    <div class="bar-line"><div class="lbl">2026-04</div><div class="bar-track"><div class="bar-fill dim" style="width:6%"></div></div><div class="v">¥26K</div></div>
+  </div>
+  <p style="font-size:12px;color:var(--muted)">夏（6-8月）が稼ぎ時。FY26は4月開始時点で前年比細い。</p>
+
+  <h3>島軒果樹園（年度別 寄付実績／LedgHOMEより）</h3>
+  <div class="bar-chart">
+    <div class="bar-line"><div class="lbl">R5 (2023)</div><div class="bar-track"><div class="bar-fill dim" style="width:3%"></div></div><div class="v">¥1.04M / 92件</div></div>
+    <div class="bar-line"><div class="lbl">R6 (2024)</div><div class="bar-track"><div class="bar-fill dim" style="width:4.4%"></div></div><div class="v">¥1.72M / 176件</div></div>
+    <div class="bar-line"><div class="lbl">R7 (2025)</div><div class="bar-track"><div class="bar-fill peak" style="width:100%"></div></div><div class="v">¥38.99M / 4,210件 <span class="pill ok">22x</span></div></div>
+    <div class="bar-line"><div class="lbl">R8 (2026)</div><div class="bar-track"><div class="bar-fill" style="width:0.1%"></div></div><div class="v">¥45K（4月）</div></div>
+  </div>
+  <p style="font-size:12px;color:var(--muted)">R7で年間¥38.99M（前年比22倍）と爆発成長。R8の在庫は シャイン2,559kg ＋ ナガノパープル246kg を仕込済。</p>
+
+  <h3>城北麺工株式会社 <span class="pill muted">データ取得待ち</span></h3>
+  <p style="font-size:12px;color:var(--muted)">5/8 MTGで坂巻社長から最優先対象として言及（そば・パックライス・餅）。商品管理シートはあり。寄付実績は次ステップで集計予定。</p>
+
+  <!-- ============== ⑤ 事業者カード ============== -->
+  <h2>⑤ 担当事業者カード<span class="right">クリックで管理シートへ</span></h2>
+
+  <div class="card-grid">
+
+    <!-- アサギ -->
+    <div class="card">
+      <span class="card-meta">事業者コード 013 ／ 進行中</span>
+      <h3>アサギ株式会社</h3>
+      <p>山形市・布団 ／ 明治39年創業、立谷川の自社工場で一貫製造。担当：井上陽平（PM）</p>
+      <div class="stats">
+        <div><span class="l">FY25 累計</span><span class="v">¥7.66M</span></div>
+        <div><span class="l">FY26 4月実績</span><span class="v">¥26K / 2件</span></div>
+        <div><span class="l">看板売上シェア</span><span class="v">97.8%</span></div>
+        <div><span class="l">看板転換率</span><span class="v">3.09%</span></div>
+        <div><span class="l">商品数</span><span class="v">22</span></div>
+      </div>
+      <div class="next">
+        <div class="lbl">NEXT ACTION</div>
+        <div class="txt">5/13〜：FY25-361 羽毛肌掛けふとん全サイズの製品情報入力（夏需要への仕込み）</div>
+      </div>
+      <div class="btn-row">
+        <a class="btn-out" href="https://docs.google.com/spreadsheets/d/10mavx3DaUcD02cHEOcBzxAcxLZyQA0ww7IRca5oj1Y4/edit" target="_blank">📋 管理シート</a>
+        <a class="btn-out" href="#asagi-detail">▼ 詳細プラン</a>
+      </div>
+    </div>
+
+    <!-- 城北麺工 -->
+    <div class="card">
+      <span class="card-meta muted">事業者コード 008 ／ プラン作成待ち</span>
+      <h3>城北麺工株式会社</h3>
+      <p>山形市・そば／パックライス／餅 ／ 5/8 MTGで「情報面」として最優先対象に言及。E申請TRUE・返礼品画像あり。</p>
+      <div class="stats">
+        <div><span class="l">FY25 累計</span><span class="v">集計待ち</span></div>
+        <div><span class="l">FY26 4月実績</span><span class="v">集計待ち</span></div>
+        <div><span class="l">商品数</span><span class="v">集計待ち</span></div>
+        <div><span class="l">担当（PM）</span><span class="v">未確定</span></div>
+      </div>
+      <div class="next">
+        <div class="lbl">NEXT ACTION</div>
+        <div class="txt">5/22まで：商品管理シートから現状集計→アサギと同テンプレでプラン作成着手</div>
+      </div>
+      <div class="btn-row">
+        <a class="btn-out" href="https://docs.google.com/spreadsheets/d/1KD85eYEodvb6jphw0RZm_fnXybLCjGmL1l8JjNrgwAU/edit" target="_blank">📋 管理シート</a>
+      </div>
+    </div>
+
+    <!-- 島軒果樹園 -->
+    <div class="card">
+      <span class="card-meta ok">LedgHOME連携 ／ R7で22倍成長</span>
+      <h3>島軒果樹園</h3>
+      <p>ぶどう専業（シャインマスカット／ナガノパープル） ／ R7で¥38.99M / 4,210件と爆発成長。担当：井上陽平（PM）</p>
+      <div class="stats">
+        <div><span class="l">R7 累計</span><span class="v">¥38.99M / 4,210件</span></div>
+        <div><span class="l">R8（4月開始）</span><span class="v">¥45K / 5件</span></div>
+        <div><span class="l">R8 シャイン在庫</span><span class="v">2,559kg</span></div>
+        <div><span class="l">R8 ナガノP在庫</span><span class="v">246kg</span></div>
+        <div><span class="l">前年比 R6→R7</span><span class="v" style="color:var(--ok)">22倍</span></div>
+      </div>
+      <div class="next">
+        <div class="lbl">NEXT ACTION</div>
+        <div class="txt">5/20まで：LedgHOME→GAS WebAppのフリーズ列エラー解消＆R8主要4SKUの製品情報点検</div>
+      </div>
+      <div class="btn-row">
+        <a class="btn-out" href="https://docs.google.com/spreadsheets/d/1hOu7Hr6cxRZ_yFmADteoL6T8VKj_YLS29AC7qix1Sno/edit" target="_blank">📋 LedgHOME連携</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============== ⑥ 今後追加 ============== -->
+  <h2>⑥ 今後カード化を予定する事業者<span class="right">マキテラス全事業者マスタより</span></h2>
+  <div class="coming">
+    <div class="it"><strong>001</strong> 吉田畜産株式会社 <span class="pill muted">山形市・牛肉</span></div>
+    <div class="it"><strong>002</strong> 株式会社中島商店 <span class="pill muted">山形市・牛肉</span></div>
+    <div class="it"><strong>003</strong> 株式会社でん六 <span class="pill muted">山形市・スイーツ</span></div>
+    <div class="it"><strong>004</strong> ライフドリンクカンパニー <span class="pill muted">山形市・炭酸水</span></div>
+    <div class="it"><strong>005</strong> 高橋畜産食肉 <span class="pill muted">山形市・牛肉</span></div>
+    <div class="it"><strong>007</strong> 島田刃物製作所 <span class="pill muted">山形市・包丁</span></div>
+    <div class="it"><strong>009</strong> SHUKAN <span class="pill muted">山形市・スイーツ</span></div>
+    <div class="it"><strong>010</strong> シベール <span class="pill muted">山形市・スイーツ</span></div>
+    <div class="it"><strong>011</strong> チャンピオン <span class="pill muted">山形市・米加工品</span></div>
+    <div class="it"><strong>014</strong> 青龍窯 <span class="pill muted">山形市・食器</span></div>
+    <div class="it">FCJ <span class="pill muted">山形市・楽天ページ</span></div>
+    <div class="it">Be-Seeds <span class="pill muted">Amazon出店支援</span></div>
+    <div class="it">川西町ほか自治体 <span class="pill muted">別自治体</span></div>
+    <div class="it">鶴岡市（チャンピオン） <span class="pill muted">別自治体</span></div>
+  </div>
+  <p style="font-size:12px;color:var(--muted);margin-top:8px">アサギで型化したテンプレ（製品情報入力→商品名・キャッチ最適化→楽天サーチ計測→月次振り返り）を、これらの事業者に順次横展開する想定。</p>
+
+  <!-- ============== ⑦ 共通ロードマップ ============== -->
+  <h2>⑦ 共通12週ロードマップ（5月→8月）</h2>
+  <div class="roadmap">
+    <div class="step"><span class="yr">5/13 ▶</span><div class="desc"><strong>製品情報入力 着手</strong>（アサギ・FY25-361 シングルから）</div></div>
+    <div class="step"><span class="yr">5/20 ▶</span><div class="desc"><strong>島軒WebApp修正</strong>（LedgHOME→GASのフリーズ列エラー解消）</div></div>
+    <div class="step"><span class="yr">5/22 ▶</span><div class="desc"><strong>城北麺工 着手</strong>（商品管理シートから現状集計→プラン作成）</div></div>
+    <div class="step"><span class="yr">5/31 ▶</span><div class="desc"><strong>夏寝具 完了</strong>（アサギ 夏7商品＋看板の必須欄完了）</div></div>
+    <div class="step"><span class="yr">6/9 ▶</span><div class="desc"><strong>月次振り返り</strong>（4週間の更新ログ／流入KW／レビュー数）</div></div>
+    <div class="step"><span class="yr">6/30 ▶</span><div class="desc"><strong>全商品 完了</strong>（アサギ全22商品＋主要商品の商品名・キャッチ最適化）</div></div>
+    <div class="step"><span class="yr">7-8月 ▶</span><div class="desc"><strong>夏需要収穫</strong>（ダウンケット／涼感寝具／シャイン秋出荷準備）</div></div>
+    <div class="step"><span class="yr">8/31 ▶</span><div class="desc"><strong>夏ピーク総括</strong>（アサギ ¥500K以上＝前年比+23%目標）</div></div>
+  </div>
+
+  <!-- ============== ⑧ アサギ詳細 ============== -->
+  <h2 id="asagi-detail">⑧ アサギ株式会社 詳細プラン（抜粋）<span class="right">フルプランは Drive ／ Notion へ</span></h2>
+
+  <h3>商品別 楽天SEO診断（上位）</h3>
+  <table class="stake-table">
+    <tr>
+      <th>#</th><th>商品（短縮）</th><th class="num">売上(円)</th><th class="num">件数</th><th class="num">アクセス</th><th class="num">転換率</th><th>診断</th>
+    </tr>
+    <tr><td>1</td><td>【備長炭】グッスリ枕 FZ23-198 <span class="pill ok">看板</span></td><td class="num">¥1,183,000</td><td class="num">80</td><td class="num">2,590</td><td class="num">3.09%</td><td><span class="pill ok">A</span> 製品情報埋め＋レビュー獲得で月100件超</td></tr>
+    <tr><td>2</td><td>枕難民専用枕 FZ22-143</td><td class="num">¥21,000</td><td class="num">1</td><td class="num">295</td><td class="num">0.34%</td><td><span class="pill warn">C</span> アクセス有り→転換しない</td></tr>
+    <tr><td>3</td><td>イビキ専用枕 FY20-748</td><td class="num">¥25,000</td><td class="num">1</td><td class="num">189</td><td class="num">0.53%</td><td><span class="pill warn">B</span> リブランド完成で伸び代</td></tr>
+    <tr><td>4</td><td>熟睡マットレス D FY23-183</td><td class="num">¥0</td><td class="num">0</td><td class="num">127</td><td class="num">0.00%</td><td><span class="pill bad">D</span> 完全に売れていない</td></tr>
+    <tr><td>7</td><td>ウォッシャブルダウンケット FY23-196</td><td class="num">¥40,000</td><td class="num">1</td><td class="num">90</td><td class="num">1.11%</td><td><span class="pill warn">B</span> 夏需要に間に合わせる</td></tr>
+    <tr><td>10</td><td>羽毛肌掛けS FY25-361 <span class="pill">新規</span></td><td class="num">¥0</td><td class="num">0</td><td class="num">57</td><td class="num">0.00%</td><td><span class="pill warn">B+</span> 夏前に育てる</td></tr>
+    <tr><td>11</td><td>羽毛布団NGL S FY23-190</td><td class="num">¥180,000</td><td class="num">2</td><td class="num">56</td><td class="num">3.57%</td><td><span class="pill ok">A-</span> 隠れエース</td></tr>
+  </table>
+
+  <h3>RMS実機検証で判明した重大事実</h3>
+  <div class="focus-strip">
+    <span class="focus-label">最優先 ACTION</span>
+    <h3>看板FZ23-198でも、製品情報の必須項目が空欄のまま</h3>
+    <p>5/13にRMS実機で確認 → ブランド名・寝具のサイズ・代表カラーが「-（未入力）」。商品名は「ねむりFitシリーズ」にリブランド済みだが、製品情報側は追従していない。これがアサギ商品が検索結果に「サイズ」「素材」「ブランド」と表示されない構造的要因。</p>
+  </div>
+
+  <h3>4週間 詳細実行プラン</h3>
+  <table class="stake-table">
+    <tr><th>Week</th><th>期間</th><th>テーマ</th><th>対象商品</th></tr>
+    <tr><td>W1</td><td>5/13-5/19</td><td>夏寝具 製品情報入力</td><td>FY25-361 全5サイズ＋FY23-196＋FY23-321</td></tr>
+    <tr><td>W2</td><td>5/20-5/26</td><td>看板＋ねむりFit枕 製品情報</td><td>FZ23-198／FY20-748／FY20-750／FZ22-143／FZ20-085／FZ21-126</td></tr>
+    <tr><td>W3</td><td>5/27-6/2</td><td>マットレス＆敷布団 製品情報</td><td>FY23-185/184/183／FY23-329/323/324／FY23-178／FY25-370／羽毛布団系</td></tr>
+    <tr><td>W4</td><td>6/3-6/9</td><td>商品名・キャッチ最適化開始</td><td>FZ23-198／FY25-361全サイズ／FY23-196／ねむりFit枕3点</td></tr>
+  </table>
+
+  <p style="font-size:13px;margin-top:14px"><strong>フルプラン：</strong>
+    <a href="https://drive.google.com/drive/folders/1qUYy63izclnR0duvxQ46uBBg5cOI-EH-" target="_blank">Google Drive（マキテラスPM）</a>
+    ／
+    <a href="https://docs.google.com/spreadsheets/d/10mavx3DaUcD02cHEOcBzxAcxLZyQA0ww7IRca5oj1Y4/edit" target="_blank">013_アサギ株式会社_管理シート</a>
+  </p>
+
+  <!-- ============== ⑨ よく使うリンク ============== -->
+  <h2>⑨ よく使うリンク</h2>
+  <div class="card-grid">
+    <a class="card" href="https://mainmenu.rms.rakuten.co.jp/" target="_blank">
+      <span class="card-meta">RMS</span>
+      <h3>🛒 楽天RMS</h3>
+      <p>商品管理／製品情報／楽天サーチ ／ 山形県山形市アカウント</p>
+    </a>
+    <a class="card" href="https://datatool.rms.rakuten.co.jp/datatool/" target="_blank">
+      <span class="card-meta">R-Karte</span>
+      <h3>📊 R-Karte データ分析</h3>
+      <p>アクセス・流入分析／楽天サーチ／関連KW・ユーザトレンド</p>
+    </a>
+    <a class="card" href="https://docs.google.com/spreadsheets/d/1jehpi_uwHHkMLg6TM4g3e2CfseARkUtzowwWFKgsYDQ/edit" target="_blank">
+      <span class="card-meta">マスタ</span>
+      <h3>📋 全事業者一覧</h3>
+      <p>マキテラス全事業者マスタ（Google Sheets）</p>
+    </a>
+    <a class="card" href="https://app.asana.com/1/1213451592237064/project/1213478069900396/timeline/1213478075128218" target="_blank">
+      <span class="card-meta">Asana</span>
+      <h3>✅ タスク管理</h3>
+      <p>マキテラスPJT進行管理 ／ 週次レビュータスク</p>
+    </a>
+  </div>
+
+  <!-- ============== 運用ルール ============== -->
+  <h2>運用ルール</h2>
+  <table class="stake-table">
+    <tr><th>項目</th><th>運用</th></tr>
+    <tr><td>更新頻度</td><td>週次（毎週月曜10分でAsanaタスクと突合 → DB更新）</td></tr>
+    <tr><td>新規事業者の追加方法</td><td>アサギを型として詳細プラン作成 → 本DBにカードを1ブロック追記</td></tr>
+    <tr><td>更新責任</td><td>井上陽平（PM）</td></tr>
+    <tr><td>共有先</td><td>Slack #makitellus_all／Asanaの週次レビュータスクに添付</td></tr>
+    <tr><td>月次振り返り</td><td>毎月末30分 → 坂巻社長＋チーム共有</td></tr>
+  </table>
+
+</div>
+
+<footer class="site-footer">
+  株式会社マキテラス ・ 社内ポータル ・ 楽天ECグロース DB ・ 最終更新 2026-05-13
+</footer>
+
+</body>
+</html>
