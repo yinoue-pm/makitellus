@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>アサギ株式会社｜楽天ECグロースDB｜株式会社マキテラス 社内ポータル</title>
+<style>
+/* ===== Portal Common（portal-common.css 相当を内包） ===== */
+:root{
+  --primary:#1A3247; --primary-ink:#fff; --accent:#E8641A;
+  --ink:#1b1f2a; --ink-soft:#4b5563; --muted:#6b7280;
+  --line:#e5e7eb; --bg:#f7f7f5; --card:#fff;
+  --tldr-bg:#fff5f0; --tldr-border:#E8641A;
+  --focus-bg:#fff8e6; --focus-border:#c9a227;
+  --ok:#15803d; --ok-bg:#dcfce7;
+  --warn:#b45309; --warn-bg:#fef3c7;
+  --bad:#b91c1c; --bad-bg:#fee2e2;
+  --radius:10px;
+  --shadow-sm:0 1px 2px rgba(15,23,42,.06);
+  --shadow-md:0 6px 20px rgba(15,23,42,.08);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI","Hiragino Sans","Noto Sans JP",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* Sticky nav */
+.gnav{position:sticky;top:0;z-index:50;background:var(--primary);color:var(--primary-ink);padding:10px 20px;display:flex;gap:18px;align-items:center;box-shadow:var(--shadow-sm);font-size:14px;flex-wrap:wrap}
+.gnav .gnav-brand{font-weight:700;letter-spacing:.02em;margin-right:8px}
+.gnav a{color:var(--primary-ink);opacity:.85;padding:4px 8px;border-radius:6px;transition:background .12s,opacity .12s}
+.gnav a:hover{opacity:1;background:rgba(255,255,255,.08);text-decoration:none}
+.gnav a.active{background:rgba(255,255,255,.14);opacity:1}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,var(--primary),#0d1e2e);color:var(--primary-ink);padding:54px 24px;text-align:center}
+.hero h1{color:var(--primary-ink);margin:0 0 10px;font-size:28px;letter-spacing:.01em}
+.hero .tagline{color:rgba(255,255,255,.85);margin:0;font-size:15px}
+.hero .accent-bar{display:inline-block;width:48px;height:4px;background:var(--accent);border-radius:2px;margin:14px 0 0}
+.hero .meta{margin-top:14px;font-size:12px;color:rgba(255,255,255,.7)}
+.hero .meta span{margin:0 6px}
+
+/* Container */
+.container{max-width:1100px;margin:0 auto;padding:30px 24px 80px}
+.crumb{font-size:13px;color:var(--muted);margin-bottom:14px}
+.crumb a{color:var(--muted)}
+.crumb a:hover{color:var(--accent)}
+h1,h2,h3,h4{color:var(--ink);line-height:1.35;margin-top:0}
+h2{font-size:22px;border-left:4px solid var(--accent);padding-left:12px;margin:40px 0 16px;display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+h2 .right{font-size:12px;color:var(--muted);font-weight:500}
+h3{font-size:16px;margin:24px 0 10px;color:var(--primary)}
+p{margin:0 0 1em}
+
+/* TL;DR */
+.tldr{background:var(--tldr-bg);border-left:4px solid var(--tldr-border);padding:16px 20px;border-radius:6px;margin:18px 0 28px;font-size:15px}
+.tldr strong{color:var(--accent)}
+
+/* Goal grid */
+.goal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:14px 0}
+.goal{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);border-top:3px solid var(--accent);padding:18px;text-align:center}
+.goal .goal-num{font-size:22px;font-weight:700;color:var(--accent);display:block;margin-bottom:4px}
+.goal .goal-label{font-size:12px;color:var(--ink-soft);letter-spacing:.04em}
+.goal .goal-sub{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* Table */
+.stake-table{width:100%;border-collapse:collapse;margin:14px 0;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.stake-table th,.stake-table td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:top}
+.stake-table th{background:var(--bg);font-weight:600;color:var(--ink-soft)}
+.stake-table tr:last-child td{border-bottom:0}
+.stake-table td.num{text-align:right;font-variant-numeric:tabular-nums}
+.stake-table .delta-up{color:var(--ok);font-weight:600}
+.stake-table .delta-down{color:var(--bad);font-weight:600}
+
+/* Pills */
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;background:#fff5f0;color:var(--accent);border:1px solid #fbd5c0;margin-right:4px}
+.pill.muted{background:#f1f5f9;color:var(--muted);border-color:#cbd5e1}
+.pill.ok{background:var(--ok-bg);color:var(--ok);border-color:#86efac}
+.pill.warn{background:var(--warn-bg);color:var(--warn);border-color:#fcd34d}
+.pill.bad{background:var(--bad-bg);color:var(--bad);border-color:#fca5a5}
+.pill.info{background:#dbeafe;color:#1e40af;border-color:#93c5fd}
+
+/* Bar chart */
+.bar-chart{margin:10px 0}
+.bar-line{display:grid;grid-template-columns:90px 1fr 130px;gap:10px;align-items:center;padding:5px 0;font-size:13px}
+.bar-line .lbl{color:var(--ink-soft);font-size:12px}
+.bar-line .v{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;font-size:12px}
+.bar-track{background:#eef2f6;height:18px;border-radius:9px;overflow:hidden}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),#f59e0b);border-radius:9px}
+.bar-fill.dim{background:linear-gradient(90deg,#94a3b8,#cbd5e1)}
+.bar-fill.peak{background:linear-gradient(90deg,#0f766e,#0891b2)}
+
+/* Strategy grid */
+.strategy{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:12px 0}
+.strategy .it{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px}
+.strategy .it .n{display:inline-block;width:24px;height:24px;line-height:24px;text-align:center;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;font-size:13px;margin-bottom:6px}
+.strategy .it .t{font-weight:700;font-size:14px;color:var(--primary);margin-bottom:4px}
+.strategy .it .d{font-size:12.5px;color:var(--ink-soft)}
+
+/* Focus banner */
+.focus-strip{background:var(--focus-bg);border:1px solid var(--focus-border);border-radius:var(--radius);padding:16px 20px;margin:18px 0}
+.focus-strip .focus-label{display:inline-block;font-size:11px;letter-spacing:.14em;font-weight:700;color:var(--focus-border);margin-bottom:6px}
+.focus-strip h3{margin:0 0 6px;font-size:17px;color:var(--ink)}
+.focus-strip p{margin:0;font-size:14px;color:var(--ink-soft)}
+.focus-strip.bad{background:#fee2e2;border-color:#fca5a5}
+.focus-strip.bad .focus-label{color:var(--bad)}
+
+/* Roadmap */
+.roadmap-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:18px 0}
+.roadmap-grid .step{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:var(--radius);padding:14px;font-size:13px}
+.roadmap-grid .step .yr{font-weight:700;color:var(--primary);display:block;margin-bottom:4px;font-size:13px}
+.roadmap-grid .step .desc{color:var(--ink-soft);font-size:12.5px}
+
+/* Card grid */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin:18px 0 28px}
+.card-mini{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:var(--radius);padding:16px 18px;font-size:13.5px}
+.card-mini h4{margin:0 0 6px;color:var(--primary);font-size:14px}
+.card-mini p{margin:0;color:var(--ink-soft);font-size:13px}
+
+/* TOC */
+.toc{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 18px;font-size:13.5px;margin:0 0 24px}
+.toc strong{display:block;margin-bottom:6px;color:var(--primary)}
+.toc a{color:var(--ink-soft);display:inline-block;padding:3px 10px 3px 0;margin-right:6px}
+.toc a:hover{color:var(--accent)}
+
+/* Buttons */
+.btn-out{display:inline-block;font-size:12px;color:var(--ink-soft);padding:5px 12px;background:#fff;border:1px solid var(--line);border-radius:999px;margin-right:4px}
+.btn-out:hover{border-color:var(--accent);color:var(--accent);text-decoration:none}
+
+/* Details */
+details{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:12px 16px;margin:10px 0}
+details summary{cursor:pointer;font-weight:600;color:var(--primary)}
+details pre{background:var(--bg);padding:12px;border-radius:6px;font-size:12px;overflow-x:auto;margin:10px 0 0;line-height:1.6}
+
+/* Footer */
+.site-footer{border-top:1px solid var(--line);padding:20px 0;margin-top:40px;text-align:center;font-size:13px;color:var(--muted)}
+
+@media (max-width:720px){
+  .gnav{gap:8px;font-size:13px;padding:8px 14px}
+  .container{padding:24px 14px 60px}
+  .hero{padding:38px 16px}
+  .hero h1{font-size:22px}
+  .bar-line{grid-template-columns:70px 1fr 110px}
+}
+</style>
+</head>
+<body>
+
+<nav class="gnav">
+  <span class="gnav-brand">マキテラス</span>
+  <a href="index.html">ホーム</a>
+  <a href="overview.html">会社と事業の全体像</a>
+  <a href="image-workflow.html">画像制作フロー設計</a>
+  <a href="rakuten-ec-growth.html">楽天ECグロースDB</a>
+</nav>
+
+<section class="hero">
+  <h1>アサギ株式会社｜楽天ふるさと納税 検索順位アップ アクションプラン</h1>
+  <p class="tagline">事業者コード 013 ／ 山形市・布団 ／ ねむりFitシリーズ統一中</p>
+  <div class="accent-bar"></div>
+  <div class="meta">
+    <span>担当：井上陽平（PM）</span>｜
+    <span>起点MTG：2026/5/8 楽天検索対策MTG（坂巻亜矢子社長）</span>｜
+    <span>v2 更新日：2026/5/13</span>
+  </div>
+</section>
+
+<div class="container">
+
+  <div class="crumb">
+    <a href="index.html">ホーム</a> ／ <a href="rakuten-ec-growth.html">楽天ECグロースDB</a> ／ アサギ株式会社
+  </div>
+
+  <!-- TL;DR -->
+  <div class="tldr">
+    <strong>3行でわかるアサギグロース：</strong>
+    売上の97.8%がFZ23-198「グッスリ枕」1商品に依存（転換率3.09%・優秀）、残り21商品は転換率0〜1%台で構造的にページ品質要改善 ／
+    5/13のRMS実機検証で <strong>看板商品ですら製品情報の必須欄（ブランド・サイズ・カラー）が空欄</strong>と判明 ／
+    夏ピーク（6〜8月）に間に合わせるため、<strong>5月内に夏寝具7商品の製品情報入力</strong>を完了させるのが最優先。
+  </div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <strong>このページの目次</strong>
+    <a href="#kpi">① KPIサマリ</a>
+    <a href="#whatsnew">② RMS実機確認結果</a>
+    <a href="#mtg">③ MTG共通戦略</a>
+    <a href="#asagi">④ 事業者現状</a>
+    <a href="#diagnosis">⑤ 商品別SEO診断</a>
+    <a href="#rms">⑥ RMS仕様</a>
+    <a href="#tools">⑦ 楽天サーチ／関連KW</a>
+    <a href="#roadmap">⑧ 12週ロードマップ</a>
+    <a href="#plan">⑨ 4週間プラン</a>
+    <a href="#sop">⑩ 作業SOP</a>
+    <a href="#kw">⑪ キーワード戦略</a>
+    <a href="#kpi-target">⑫ KPI目標</a>
+    <a href="#risk">⑬ リスク</a>
+  </div>
+
+  <!-- ============== ① KPI ============== -->
+  <h2 id="kpi">① KPIサマリ</h2>
+  <div class="goal-grid">
+    <div class="goal">
+      <span class="goal-num">¥7.66M</span>
+      <span class="goal-label">FY25 年度累計</span>
+      <div class="goal-sub">全ポータル合算</div>
+    </div>
+    <div class="goal">
+      <span class="goal-num">¥26K</span>
+      <span class="goal-label">FY26 4月実績</span>
+      <div class="goal-sub">看板商品1点のみ／2件</div>
+    </div>
+    <div class="goal">
+      <span class="goal-num">97.8%</span>
+      <span class="goal-label">看板売上シェア</span>
+      <div class="goal-sub">FZ23-198 1商品依存</div>
+    </div>
+    <div class="goal">
+      <span class="goal-num">3.09%</span>
+      <span class="goal-label">看板転換率</span>
+      <div class="goal-sub">優秀。他は0〜1%台</div>
+    </div>
+  </div>
+
+  <div class="focus-strip bad">
+    <span class="focus-label">v2で判明した重大事実</span>
+    <h3>看板商品 FZ23-198 ですら、製品情報の必須項目が空欄のまま</h3>
+    <p>5/13にRMS実機で確認 → ブランド名・寝具のサイズ・代表カラーが「-（未入力）」。
+    商品名は「ねむりFitシリーズ」にリブランド済みだが、製品情報側は追従していない。
+    これがアサギ商品が検索結果に「サイズ」「素材」「ブランド」と表示されない構造的要因。</p>
+  </div>
+
+  <!-- ============== ② v2新規 ============== -->
+  <h2 id="whatsnew">② RMS実機確認結果（5/13）</h2>
+  <p style="font-size:14px;color:var(--ink-soft)">5/13に <code style="background:#f3f4f6;padding:2px 5px;border-radius:4px;font-size:12px">https://mainmenu.rms.rakuten.co.jp/</code> にログインし、看板商品 FZ23-198 を実機で開いて以下を確認。</p>
+  <table class="stake-table">
+    <tr><th>項目</th><th>議事録の記述</th><th>RMS実機確認</th><th>判定</th></tr>
+    <tr><td>商品一覧 インライン編集</td><td>「修正」ボタンから可能</td><td>各商品行に「修正」リンクがあり、「一覧に反映」→右上「更新」で確定</td><td><span class="pill ok">議事録通り</span></td></tr>
+    <tr><td>商品編集画面のタブ</td><td>「製品情報」「ページデザイン」あり</td><td>バリエーション／販売・価格／在庫・配送／<strong>製品情報</strong>／ページデザイン／定期購入 の6タブ</td><td><span class="pill ok">議事録通り</span></td></tr>
+    <tr><td>FZ23-198 の製品情報入力状況</td><td>言及なし</td><td><strong>必須項目「ブランド名」「寝具のサイズ」「代表カラー」が空欄</strong>。メーカー型番＝アサギ株式会社、原産国＝日本、抗菌加工＝有、消臭・防臭＝有のみ入力済。</td><td><span class="pill bad">最優先で改修</span></td></tr>
+    <tr><td>関連キーワード入力欄</td><td>場所未特定（佐藤フル氏に確認予定）</td><td><strong>商品編集画面内には独立欄なし</strong>。実態は <strong>キャッチコピー欄（全角87文字）にKWを並べる方式</strong>。別途 R-Karte ＞ 楽天サーチ ＞ <strong>関連キーワード・ユーザトレンド</strong>分析がKW選定の一次情報源。</td><td><span class="pill info">場所特定</span></td></tr>
+    <tr><td>楽天サーチでの流入KW</td><td>データ分析で確認可、CSV可</td><td>R-Karte ＞ アクセス・流入分析 ＞ 楽天サーチ。商品×KW×アクセス×転換率×順位＋RMSによる<strong>「アクセス数を増やそう」「転換率を上げよう」「Good」</strong>の自動判定。CSV可。</td><td><span class="pill ok">議事録通り＋判定機能</span></td></tr>
+    <tr><td>店舗内カテゴリ</td><td>言及なし</td><td>FZ23-198は「寝具\枕／父の日／敬老の日」設定済。季節カテゴリも有効活用可能。</td><td><span class="pill info">追加発見</span></td></tr>
+    <tr><td>店舗全体（おもてなし山形）</td><td>言及なし</td><td>5/1〜5/12実績：売上 ¥59,961,000（前月比+60%、前年比+25%）／転換率12.65％／改修対象110＋103件。</td><td><span class="pill info">全体KPI把握</span></td></tr>
+  </table>
+
+  <div class="focus-strip">
+    <span class="focus-label">結論</span>
+    <h3>「関連キーワード」の正体（v2特定）</h3>
+    <p>商品編集UIには独立した入力欄は存在せず、<strong>キャッチコピー欄＋楽天サーチ「関連キーワード・ユーザトレンド」分析機能</strong>で代替される設計。
+    坂巻社長が佐藤フル氏に確認予定だった件は、<strong>「商品名・キャッチコピーに反映する」が答え</strong>になりそう。</p>
+  </div>
+
+  <!-- ============== ③ MTG ============== -->
+  <h2 id="mtg">③ 5/8 楽天検索対策MTG 共通戦略</h2>
+  <div class="strategy">
+    <div class="it"><span class="n">1</span><div class="t">製品情報タブを埋める</div><div class="d">商品仕様（ブランド・サイズ・原産国・素材・重量）を必須項目から。検索結果に詳細表示で差別化。</div></div>
+    <div class="it"><span class="n">2</span><div class="t">ジャンルIDの正確性</div><div class="d">間違ったジャンルが設定されていることがある。製品情報入力時に必ず確認。</div></div>
+    <div class="it"><span class="n">3</span><div class="t">商品名＋キャッチコピー</div><div class="d">トレンドKW（楽天サジェスト＋関連KW・ユーザトレンド）を商品名＋キャッチに反映。スパムは避ける。</div></div>
+    <div class="it"><span class="n">4</span><div class="t">毎日コツコツ更新</div><div class="d">1日1項目でも更新するとアルゴリズム上で順位が上がる。1文字変更でも更新と見なされる。</div></div>
+  </div>
+
+  <h3>担当割（議事録の決定事項）</h3>
+  <table class="stake-table">
+    <tr><th>担当</th><th>受け持ち</th><th>主な情報源</th></tr>
+    <tr><td>井上陽平（私）</td><td><strong>アサギ商品の製品情報入力</strong>。ネット上のスペック数字を反映。</td><td>商品ページ／E申請データ</td></tr>
+    <tr><td>Aya Saiki</td><td>自分担当商品のスペック数字を製品情報フィールドへ反映</td><td>同上</td></tr>
+    <tr><td>北面こさん</td><td>E申請情報からしか取れないスペック中心</td><td>キックさんの全返礼品情報</td></tr>
+    <tr><td>グループ</td><td>製品情報完了後、商品名・キャッチコピーをトレンドKWで更新（毎日1項目）</td><td>楽天サジェスト／関連KW・ユーザトレンド</td></tr>
+    <tr><td>坂巻亜矢子</td><td>RMSの関連KW入力箇所を佐藤フル氏に確認</td><td>RMS（v2で実機特定済）</td></tr>
+  </table>
+
+  <!-- ============== ④ 現状 ============== -->
+  <h2 id="asagi">④ 事業者プロフィール／月次推移</h2>
+  <table class="stake-table">
+    <tr><th style="width:140px">事業者名</th><td>アサギ株式会社（事業者コード 013）</td></tr>
+    <tr><th>自治体</th><td>山形市</td></tr>
+    <tr><th>ジャンル</th><td>布団（枕／敷きふとん／羽毛布団／羽毛肌掛けふとん／マットレス／ケット類）</td></tr>
+    <tr><th>強み</th><td>明治39年創業。山形市内（立谷川）の自社工場で裁断・製綿・キルティング加工・検品まで一貫製造。地場産品基準号数3。</td></tr>
+    <tr><th>共有資料</th><td>
+      <a class="btn-out" href="https://docs.google.com/spreadsheets/d/10mavx3DaUcD02cHEOcBzxAcxLZyQA0ww7IRca5oj1Y4/edit" target="_blank">📋 013_管理シート</a>
+      <a class="btn-out" href="https://mainmenu.rms.rakuten.co.jp/" target="_blank">🛒 楽天RMS</a>
+    </td></tr>
+  </table>
+
+  <h3>月次の売上推移（FY2025 寄付実績ダッシュボード）</h3>
+  <div class="bar-chart">
+    <div class="bar-line"><div class="lbl">2025-04</div><div class="bar-track"><div class="bar-fill dim" style="width:0%"></div></div><div class="v">¥0 / 0件</div></div>
+    <div class="bar-line"><div class="lbl">2025-05</div><div class="bar-track"><div class="bar-fill" style="width:47%"></div></div><div class="v">¥194K / 8件</div></div>
+    <div class="bar-line"><div class="lbl">2025-06</div><div class="bar-track"><div class="bar-fill dim" style="width:27%"></div></div><div class="v">¥112K / 8件</div></div>
+    <div class="bar-line"><div class="lbl">2025-07</div><div class="bar-track"><div class="bar-fill" style="width:54%"></div></div><div class="v">¥222K / 8件</div></div>
+    <div class="bar-line"><div class="lbl">2025-08</div><div class="bar-track"><div class="bar-fill peak" style="width:100%"></div></div><div class="v">¥407K / 10件 <span class="pill ok">ピーク</span></div></div>
+    <div class="bar-line"><div class="lbl">2026-03</div><div class="bar-track"><div class="bar-fill dim" style="width:13%"></div></div><div class="v">¥54K / 4件</div></div>
+    <div class="bar-line"><div class="lbl">2026-04</div><div class="bar-track"><div class="bar-fill dim" style="width:6%"></div></div><div class="v">¥26K / 2件</div></div>
+  </div>
+  <p style="font-size:12px;color:var(--muted)">FY2025年度累計：<strong>¥7,656,000</strong> ／ 季節性：過去2年とも <strong>夏（6〜8月）が稼ぎ時</strong>。5月のうちに製品情報＆KW仕込みを終え、6月から流入を取りに行く。</p>
+
+  <h3>直近の動き</h3>
+  <ul style="font-size:13.5px;color:var(--ink-soft)">
+    <li>2026/3/11付で大量のE申請 <span class="pill">FY25-361系（羽毛肌掛けS/SD/D/Q/K）</span> <span class="pill">ねむりFitリブランド系（FY20-748, FY20-750）</span></li>
+    <li>「<strong>ねむりFitシリーズ</strong>」へブランド統一中（商品名は反映済、製品情報は未反映）</li>
+    <li>羽毛肌掛けふとん「シングルのみ」→「SD/D/Q/Kを新規申請」で<strong>全サイズ展開</strong>に</li>
+    <li>無地展開（2〜3色）／受注生産での新規申請／生地統一・1ブランド統一は継続検討</li>
+  </ul>
+
+  <!-- ============== ⑤ 商品別診断 ============== -->
+  <h2 id="diagnosis">⑤ 商品別 楽天SEO診断（上位）</h2>
+  <table class="stake-table">
+    <tr>
+      <th>#</th><th>商品（短縮）</th><th class="num">売上(円)</th><th class="num">件数</th><th class="num">アクセス</th><th class="num">転換率</th><th class="num">レビュー</th><th>診断</th>
+    </tr>
+    <tr><td>1</td><td>【備長炭】グッスリ枕 FZ23-198 <span class="pill ok">看板</span></td><td class="num">¥1,183,000</td><td class="num">80</td><td class="num">2,590</td><td class="num">3.09%</td><td class="num">4.47 / 15</td><td><span class="pill ok">A</span> 製品情報埋め＋レビュー獲得で月100件超</td></tr>
+    <tr><td>2</td><td>枕難民専用枕 FZ22-143</td><td class="num">¥21,000</td><td class="num">1</td><td class="num">295</td><td class="num">0.34%</td><td class="num">5.0 / 1</td><td><span class="pill warn">C</span> アクセス有り→転換しない</td></tr>
+    <tr><td>3</td><td>イビキ専用枕 FY20-748 <span class="pill">ねむりFit化</span></td><td class="num">¥25,000</td><td class="num">1</td><td class="num">189</td><td class="num">0.53%</td><td class="num">0 / 0</td><td><span class="pill warn">B</span> リブランド完成で伸び代</td></tr>
+    <tr><td>4</td><td>熟睡マットレス D FY23-183</td><td class="num">¥0</td><td class="num">0</td><td class="num">127</td><td class="num">0.00%</td><td class="num">0 / 0</td><td><span class="pill bad">D</span> 完全に売れていない</td></tr>
+    <tr><td>5</td><td>腰痛敷布団 ブルー FY23-329</td><td class="num">¥0</td><td class="num">0</td><td class="num">101</td><td class="num">0.00%</td><td class="num">0 / 0</td><td><span class="pill bad">D</span></td></tr>
+    <tr><td>6</td><td>熟睡マットレス SD FY23-184</td><td class="num">¥0</td><td class="num">0</td><td class="num">94</td><td class="num">0.00%</td><td class="num">0 / 0</td><td><span class="pill bad">D</span></td></tr>
+    <tr><td>7</td><td>ウォッシャブルダウンケット FY23-196</td><td class="num">¥40,000</td><td class="num">1</td><td class="num">90</td><td class="num">1.11%</td><td class="num">0 / 0</td><td><span class="pill warn">B</span> 夏需要に間に合わせる</td></tr>
+    <tr><td>8</td><td>腰痛敷布団ハード FY23-178</td><td class="num">¥120,000</td><td class="num">1</td><td class="num">88</td><td class="num">1.14%</td><td class="num">0 / 0</td><td><span class="pill warn">B</span> 高単価。レビューで押し上げ可</td></tr>
+    <tr><td>10</td><td>羽毛肌掛けS FY25-361 <span class="pill">新規</span></td><td class="num">¥0</td><td class="num">0</td><td class="num">57</td><td class="num">0.00%</td><td class="num">0 / 0</td><td><span class="pill warn">B+</span> 夏前に育てる</td></tr>
+    <tr><td>11</td><td>羽毛布団NGL S FY23-190</td><td class="num">¥180,000</td><td class="num">2</td><td class="num">56</td><td class="num">3.57%</td><td class="num">0 / 0</td><td><span class="pill ok">A-</span> 隠れエース（単価×転換率）</td></tr>
+    <tr><td>13</td><td>羽毛布団EGL S FY23-188</td><td class="num">¥120,000</td><td class="num">1</td><td class="num">27</td><td class="num">3.70%</td><td class="num">0 / 0</td><td><span class="pill ok">A-</span></td></tr>
+    <tr><td>14-18</td><td>NGLダブル／手引真綿枕／RGL／テンセルケット／コットン敷パッド</td><td class="num" colspan="5">いずれも売上ゼロ・アクセス10〜26人</td><td><span class="pill bad">D</span> 個別に丁寧に</td></tr>
+  </table>
+
+  <!-- ============== ⑥ RMS仕様 ============== -->
+  <h2 id="rms">⑥ RMSの正確な仕様（実機検証済）</h2>
+
+  <h3>ログイン → 商品到達経路</h3>
+  <ol style="font-size:13.5px;color:var(--ink-soft)">
+    <li><a href="https://mainmenu.rms.rakuten.co.jp/" target="_blank">https://mainmenu.rms.rakuten.co.jp/</a>（山形県山形市アカウント）</li>
+    <li>左ナビ <strong>店舗設定 ＞ 1 商品管理</strong></li>
+    <li><strong>商品一覧・登録</strong> ボタン</li>
+    <li>キーワード検索欄に商品番号（例 <code>FZ23-198</code>）を入力 → 検索</li>
+    <li>該当行の <strong>「編集」</strong> リンク → 新タブで商品編集画面が開く</li>
+  </ol>
+
+  <h3>商品編集画面のタブ構成（6タブ）</h3>
+  <table class="stake-table">
+    <tr><th>タブ</th><th>主な内容</th><th>SEOへの効き</th></tr>
+    <tr><td>バリエーション</td><td>SKU、配送、属性別在庫など</td><td>低</td></tr>
+    <tr><td>販売・価格</td><td>価格設定、商品別ポイント、販売設定</td><td>中</td></tr>
+    <tr><td>在庫・配送</td><td>在庫数、配送方法、送料</td><td>中（在庫切れは順位↓）</td></tr>
+    <tr><td><strong>製品情報</strong></td><td>ジャンルID／商品仕様（必須項目多数）</td><td><strong>大</strong>（坂巻社長最優先指示）</td></tr>
+    <tr><td>ページデザイン</td><td>説明文／商品ページ画像／店舗内カテゴリ／ページレイアウト</td><td>中</td></tr>
+    <tr><td>定期購入</td><td>定期購入設定</td><td>低</td></tr>
+  </table>
+
+  <h3>製品情報タブ — 商品仕様の必須／任意項目（枕ジャンルの場合）</h3>
+  <table class="stake-table">
+    <tr><th>区分</th><th>項目</th><th>FZ23-198 現在値</th><th>あるべき入力例</th></tr>
+    <tr><td rowspan="6"><span class="pill bad">必須</span></td><td>カタログID</td><td>IDなし「5: 該当製品コードなし」</td><td>そのまま</td></tr>
+    <tr><td>ブランド名</td><td style="color:var(--bad);font-weight:600">- 未入力</td><td>ねむりFit / アサギ</td></tr>
+    <tr><td>メーカー型番</td><td>アサギ株式会社</td><td>FZ23-198</td></tr>
+    <tr><td>寝具のサイズ</td><td style="color:var(--bad);font-weight:600">- 未入力</td><td>シングル相当</td></tr>
+    <tr><td>代表カラー</td><td style="color:var(--bad);font-weight:600">- 未入力</td><td>ベージュ／グリーン等</td></tr>
+    <tr><td>ジャンルID</td><td>205582（インテリア・寝具・収納＞寝具＞枕・抱き枕＞枕）</td><td>正しい</td></tr>
+    <tr><td rowspan="9"><span class="pill muted">任意</span></td><td>シリーズ名</td><td>未入力</td><td><strong>ねむりFit</strong></td></tr>
+    <tr><td>原産国／製造国</td><td>日本</td><td>そのまま</td></tr>
+    <tr><td>素材（生地・毛糸）</td><td>未入力</td><td>側：備長炭ハニカム／中芯：プロファイルウレタン／中綿：羊毛50%・抗菌防臭ポリエステル50%</td></tr>
+    <tr><td>本体横幅／縦幅（cm）</td><td>未入力</td><td>34 / 54</td></tr>
+    <tr><td>本体高さ（最高／最低）</td><td>未入力</td><td>6 / 6</td></tr>
+    <tr><td>枕のタイプ</td><td>未入力</td><td>低め／首肩サポート／凹凸</td></tr>
+    <tr><td>抗菌加工 ／ 消臭・防臭</td><td>有 / 有</td><td>そのまま</td></tr>
+    <tr><td>防虫・防ダニ／高反発／冷感／吸湿</td><td>未入力</td><td>該当のみ有</td></tr>
+    <tr><td>自由入力行1〜5（各20文字/値70文字）</td><td>未入力</td><td>「備長炭ハニカム構造」「両面凹凸」「呼吸サポート」など</td></tr>
+  </table>
+
+  <!-- ============== ⑦ 楽天サーチ ============== -->
+  <h2 id="tools">⑦ 楽天サーチ／関連KW・ユーザトレンドの使い方</h2>
+  <p style="font-size:14px;color:var(--ink-soft)">場所：R-Karte（データ分析） ＞ アクセス・流入分析 ＞ 楽天サーチ。タブが3つある。</p>
+  <table class="stake-table">
+    <tr><th>タブ</th><th>用途</th><th>キーポイント</th></tr>
+    <tr><td>商品別検索キーワード</td><td>各商品ごとに、市場検索経由のアクセス・実際のKW・転換率・市場検索順位を確認</td><td>RMSが「アクセス数を増やそう／転換率を上げよう／Good」を自動判定。<strong>店舗全体で改修対象110＋103件</strong>（5/12時点）。CSV可。</td></tr>
+    <tr><td>商品別特典設定</td><td>クーポン・ポイント特典設定状況</td><td>ふるさと納税では使用機会少。楽天スーパーSALE時のポイント変倍は順位に効く。</td></tr>
+    <tr><td>関連キーワード・ユーザトレンド</td><td>自店舗に流入するKWと、楽天市場で同時に検索されるKW1・2、検索ユーザの性別・年齢</td><td>議事録の「関連KW」の正体。例：「ふるさと納税 米」と一緒に「定期便／10kg／5kg」が検索される。アサギなら「ふるさと納税 枕」「ふるさと納税 羽毛布団」の関連KWを吸い上げる。</td></tr>
+  </table>
+
+  <!-- ============== ⑧ ロードマップ ============== -->
+  <h2 id="roadmap">⑧ 12週ロードマップ（5月→8月）</h2>
+  <div class="roadmap-grid">
+    <div class="step"><span class="yr">5/13 ▶</span><div class="desc"><strong>FY25-361 着手</strong>夏寝具の製品情報入力スタート</div></div>
+    <div class="step"><span class="yr">5/20 ▶</span><div class="desc"><strong>看板FZ23-198</strong>必須3項目埋め</div></div>
+    <div class="step"><span class="yr">5/26 ▶</span><div class="desc"><strong>W2振り返り</strong>楽天サーチでKW吸上げ</div></div>
+    <div class="step"><span class="yr">5/31 ▶</span><div class="desc"><strong>夏寝具完了</strong>FY25-361全＋夏ケット類</div></div>
+    <div class="step"><span class="yr">6/9 ▶</span><div class="desc"><strong>W4振り返り</strong>＋商品名・キャッチ最適化開始</div></div>
+    <div class="step"><span class="yr">6/30 ▶</span><div class="desc"><strong>全22商品完了</strong>製品情報＋主要KW最適化</div></div>
+    <div class="step"><span class="yr">7-8月 ▶</span><div class="desc"><strong>夏需要収穫</strong>ダウンケット流入計測</div></div>
+    <div class="step"><span class="yr">8/31 ▶</span><div class="desc"><strong>夏ピーク総括</strong>¥500K以上（前年比+23%）</div></div>
+  </div>
+
+  <!-- ============== ⑨ 4週間プラン ============== -->
+  <h2 id="plan">⑨ 4週間 詳細実行プラン（5/13 - 6/9）</h2>
+
+  <h3>Week 1（5/13 - 5/19）：夏寝具の製品情報入力 <span class="pill bad">最優先</span></h3>
+  <table class="stake-table">
+    <tr><th>日</th><th>対象</th><th>作業</th></tr>
+    <tr><td>5/13(火)</td><td>FY25-361 羽毛肌掛けS</td><td>製品情報全項目入力（サイズ／側生地／中綿／総重量／梱包サイズ）＋ジャンル「掛け布団」確認</td></tr>
+    <tr><td>5/14(水)</td><td>FY25-361 SD</td><td>同上</td></tr>
+    <tr><td>5/15(木)</td><td>FY25-361 D</td><td>同上</td></tr>
+    <tr><td>5/16(金)</td><td>FY25-361 Q</td><td>同上</td></tr>
+    <tr><td>5/17(土)</td><td>FY25-361 K</td><td>同上</td></tr>
+    <tr><td>5/18(日)</td><td>FY23-196 ウォッシャブルダウンケット</td><td>製品情報＋ジャンル確認</td></tr>
+    <tr><td>5/19(月)</td><td>FY23-321 テンセル100％ケット</td><td>製品情報＋ジャンル確認</td></tr>
+  </table>
+
+  <h3>Week 2（5/20 - 5/26）：看板＋ねむりFit枕の製品情報</h3>
+  <table class="stake-table">
+    <tr><th>日</th><th>対象</th><th>作業</th></tr>
+    <tr><td>5/20</td><td><strong>FZ23-198 看板</strong></td><td>必須3項目（ブランド名／寝具のサイズ／代表カラー）＋シリーズ名＝ねむりFit＋本体サイズ／素材／枕のタイプ／自由入力行</td></tr>
+    <tr><td>5/21</td><td>FY20-748 ねむりFit イビキ軽減枕</td><td>同上</td></tr>
+    <tr><td>5/22</td><td>FY20-750 ねむりFit 熟睡枕</td><td>同上</td></tr>
+    <tr><td>5/23</td><td>FZ22-143 枕難民専用枕</td><td>同上</td></tr>
+    <tr><td>5/24</td><td>FZ20-085 さくらんぼ種枕</td><td>差別化KW「日本製」「希少品」を自由入力に</td></tr>
+    <tr><td>5/25</td><td>FZ21-126 手引真綿100％枕</td><td>同上</td></tr>
+    <tr><td>5/26</td><td>RMS楽天サーチでアサギ流入KW確認＋週次振り返り</td><td>「アクセス数を増やそう」判定商品の抽出、CSV取得</td></tr>
+  </table>
+
+  <h3>Week 3（5/27 - 6/2）：マットレス＆敷布団</h3>
+  <table class="stake-table">
+    <tr><th>日</th><th>対象</th><th>作業</th></tr>
+    <tr><td>5/27</td><td>FY23-185 マットレスS</td><td>製品情報＋ジャンル確認</td></tr>
+    <tr><td>5/28</td><td>FY23-184 マットレスSD</td><td>同上</td></tr>
+    <tr><td>5/29</td><td>FY23-183 マットレスD</td><td>同上</td></tr>
+    <tr><td>5/30</td><td>FY23-329/323/324 腰痛敷布団</td><td>製品情報まとめて</td></tr>
+    <tr><td>5/31</td><td>FY23-178 腰痛敷布団ハード</td><td>同上</td></tr>
+    <tr><td>6/1</td><td>FY25-370 コットン敷パッド</td><td>同上</td></tr>
+    <tr><td>6/2</td><td>羽毛布団系 FY23-190/188/187/189/176/FY20-143</td><td>製品情報まとめて</td></tr>
+  </table>
+
+  <h3>Week 4（6/3 - 6/9）：商品名・キャッチ最適化開始</h3>
+  <table class="stake-table">
+    <tr><th>日</th><th>対象</th><th>作業</th></tr>
+    <tr><td>6/3</td><td><strong>FZ23-198</strong></td><td>商品名にトレンドKW追加＋キャッチコピー精査</td></tr>
+    <tr><td>6/4</td><td>FY25-361 シングル</td><td>夏需要KW「ダウンケット」「肌掛け」を強調</td></tr>
+    <tr><td>6/5</td><td>FY25-361 SD/D</td><td>同上</td></tr>
+    <tr><td>6/6</td><td>FY25-361 Q/K</td><td>同上</td></tr>
+    <tr><td>6/7</td><td>FY23-196 ウォッシャブル</td><td>同上</td></tr>
+    <tr><td>6/8</td><td>ねむりFit枕3点</td><td>同上</td></tr>
+    <tr><td>6/9</td><td>月次振り返り（坂巻社長＋Aya Saiki共有）</td><td>4週間の更新ログ／流入KW変化／レビュー数</td></tr>
+  </table>
+
+  <!-- ============== ⑩ SOP ============== -->
+  <h2 id="sop">⑩ 作業SOP（実機確認版）</h2>
+
+  <h3>10-1. ログインから商品到達</h3>
+  <ol style="font-size:13.5px;color:var(--ink-soft)">
+    <li><a href="https://mainmenu.rms.rakuten.co.jp/" target="_blank">RMS</a> でログイン（山形県山形市アカウント）</li>
+    <li>左ナビ「店舗設定 ＞ 1 商品管理」 ＞ 「商品一覧・登録」</li>
+    <li>キーワード検索で <code>FZ23-198</code> など商品番号を入力 → 検索</li>
+    <li>該当行「編集」リンク（新タブで開く）</li>
+  </ol>
+
+  <h3>10-2. 製品情報タブの入力手順（坂巻社長の最優先指示）</h3>
+  <ol style="font-size:13.5px;color:var(--ink-soft)">
+    <li>「製品情報」タブをクリック</li>
+    <li>ジャンルIDが正しいか確認</li>
+    <li>商品仕様セクションで <strong>必須項目4つ</strong>を埋める（カタログID／ブランド名／メーカー型番／寝具のサイズ／代表カラー）</li>
+    <li>任意項目で差別化に効く項目を埋める（シリーズ名／原産国／素材／本体サイズ／枕のタイプ／自由入力行1〜5）</li>
+    <li>ページ末尾の <strong>「更新する」ボタン</strong>をクリック</li>
+    <li>20分後に商品ページで表示確認</li>
+  </ol>
+
+  <h3>10-3. 商品一覧画面でのインライン編集</h3>
+  <ol style="font-size:13.5px;color:var(--ink-soft)">
+    <li>商品一覧画面で対象商品の <strong>商品名／キャッチコピー欄の「修正」リンク</strong>をクリック</li>
+    <li>その場で編集 → 「一覧に反映」</li>
+    <li>右上の <strong>「更新」ボタン</strong>を押下（押さないと反映されない）</li>
+  </ol>
+
+  <h3>10-4. 楽天サーチでKW収集</h3>
+  <ol style="font-size:13.5px;color:var(--ink-soft)">
+    <li>R-Karte ＞ アクセス・流入分析 ＞ 楽天サーチ</li>
+    <li>「商品別検索キーワード」タブでアサギ商品にフィルター → 改修対象を抽出</li>
+    <li>「関連キーワード・ユーザトレンド」タブで主要KWの関連語を確認</li>
+    <li>CSVダウンロード → Asanaの週次レビュータスクに添付</li>
+  </ol>
+
+  <details>
+    <summary>📋 商品登録チェックリスト（実機検証版）</summary>
+    <pre>□ 製品情報タブ：ジャンルID 正しい
+□ 製品情報タブ：カタログID（基本「該当なし」）
+□ 製品情報タブ：ブランド名（必須）
+□ 製品情報タブ：メーカー型番（必須）
+□ 製品情報タブ：寝具のサイズ（必須）
+□ 製品情報タブ：代表カラー（必須）
+□ 製品情報タブ：シリーズ名 ＝ ねむりFit
+□ 製品情報タブ：原産国 ＝ 日本
+□ 製品情報タブ：素材
+□ 製品情報タブ：本体サイズ（横幅・縦幅・高さ）
+□ 製品情報タブ：抗菌・消臭・防虫等の機能
+□ 製品情報タブ：自由入力行1〜5（差別化要素）
+□ ページデザインタブ：店舗内カテゴリ（最大5）
+□ ページデザインタブ：商品ページ画像（メイン＋サブ）
+□ 商品名にトレンドKW2〜3個入り（楽天サーチで確認）
+□ キャッチコピー（産地＋差別化＋ベネフィット＋KW）
+□ 「更新する」ボタン押下
+□ 20分後にページ反映確認</pre>
+  </details>
+
+  <!-- ============== ⑪ KW戦略 ============== -->
+  <h2 id="kw">⑪ キーワード戦略</h2>
+  <p style="font-size:14px;color:var(--ink-soft)">一次情報は <strong>楽天サジェスト＋楽天サーチ「関連キーワード・ユーザトレンド」</strong>。下記は布団・寝具領域の頻出パターン（実作業時は要再確認）。</p>
+
+  <div class="card-grid">
+    <div class="card-mini">
+      <h4>枕</h4>
+      <p>ふるさと納税 枕／肩こり／首こり／いびき／高さ調整／低い／高い／日本製／山形／備長炭／涼感</p>
+    </div>
+    <div class="card-mini">
+      <h4>羽毛布団・ダウンケット</h4>
+      <p>ふるさと納税 羽毛布団／ダウンケット／シングル／ダブル／クイーン／キング／肌掛け／夏／洗える／リフォーム／ダウン85・90・93／NGL・EGL・RGL</p>
+    </div>
+    <div class="card-mini">
+      <h4>敷布団・マットレス</h4>
+      <p>ふるさと納税 敷布団／マットレス／シングル／ダブル／高反発／体圧分散／腰痛／硬め／凹凸</p>
+    </div>
+    <div class="card-mini">
+      <h4>ケット・パッド（夏）</h4>
+      <p>ふるさと納税 タオルケット／ガーゼケット／テンセル ケット／天然素材／敷パッド／涼感</p>
+    </div>
+  </div>
+
+  <h3>商品名テンプレート例</h3>
+  <table class="stake-table">
+    <tr><th>対象</th><th>現行（短縮）</th><th>改善案</th></tr>
+    <tr><td>FZ23-198 グッスリ枕</td><td>【ねむりFitシリーズ】日本製 寝具 メーカー直送 グッスリ枕（首・肩サポートタイプ) FZ23-198</td><td>【高評価★4.4】枕 肩こり 首こり 低め 山形 備長炭 グッスリ枕 両面凹凸構造 ねむりFitシリーズ 日本製 FZ23-198</td></tr>
+    <tr><td>FY25-361 羽毛肌掛けS</td><td>工場直送！ふとん専門メーカーの羽毛肌掛けふとん シングル[150cm×210cm]</td><td>羽毛肌掛けふとん ダウンケット シングル 150×210 ダウン85% ニューゴールドラベル 山形 アサギ 日本製 夏 FY25-361</td></tr>
+  </table>
+
+  <div class="focus-strip">
+    <span class="focus-label">注意</span>
+    <h3>スパム判定を避ける</h3>
+    <p>関連性のないKWを大量に詰め込むと <strong>スパム判定</strong>される（坂巻社長言及）。1商品あたり <strong>主要KW2〜3＋差別化要素1〜2＋ブランド・産地</strong>に絞る。</p>
+  </div>
+
+  <!-- ============== ⑫ KPI ============== -->
+  <h2 id="kpi-target">⑫ KPI目標と振り返り</h2>
+  <table class="stake-table">
+    <tr><th>指標</th><th>現状</th><th>5月末</th><th>6月末</th><th>8月末（夏ピーク）</th></tr>
+    <tr><td>月次寄付金額</td><td>4月 ¥26K</td><td>¥60K以上</td><td>¥150K</td><td>¥500K（前年¥407K +23%）</td></tr>
+    <tr><td>月次寄付件数</td><td>4月 2件</td><td>5件以上</td><td>10件以上</td><td>15件以上</td></tr>
+    <tr><td>製品情報入力済み</td><td>3項目／22商品</td><td>夏寝具7商品完了</td><td>全22商品完了</td><td>維持</td></tr>
+    <tr><td>商品名/キャッチ最適化</td><td>看板1商品のみ</td><td>5商品</td><td>15商品</td><td>全22商品</td></tr>
+    <tr><td>FZ23-198 月次件数</td><td>月平均 約7件</td><td>10件</td><td>12件</td><td>15件以上</td></tr>
+    <tr><td>FZ23-198 レビュー</td><td>15件</td><td>17件</td><td>20件</td><td>30件</td></tr>
+    <tr><td>楽天サーチ「Good」数</td><td>未集計</td><td>計測開始</td><td>3商品</td><td>10商品</td></tr>
+  </table>
+  <p style="font-size:12px;color:var(--muted)">振り返りは <strong>毎週月曜10分</strong>＋ <strong>月末1回 30分</strong>。Asana「マキテラスPJT進行管理」に「アサギ_週次レビュー」を積み上げる。</p>
+
+  <!-- ============== ⑬ リスク ============== -->
+  <h2 id="risk">⑬ リスク・未確定事項</h2>
+  <ul style="font-size:13.5px;color:var(--ink-soft)">
+    <li><strong>店舗内カテゴリの「ふるさと納税」専用カテゴリ</strong>：FZ23-198は「寝具\枕／父の日／敬老の日」設定。夏向けに「夏ギフト」「お中元」など季節カテゴリの活用余地（要おもてなし山形側と相談）。</li>
+    <li><strong>一括登録CSV</strong>：現時点では禁止。リテラシー向上後にDX部マターで自動化検討。</li>
+    <li><strong>レビュー獲得</strong>：楽天は自然レビューが基本。サンクスレター（同梱）／メルマガでの依頼など事業者側で実施できる範囲で。</li>
+    <li><strong>FY25-361系の在庫</strong>：シングル1000・他100ずつ。夏に在庫切れ→順位下落リスク。月次でモニタ。</li>
+    <li><strong>ねむりFitリブランドの過渡期</strong>：商品名は新ブランドに変更済みだが、製品情報のシリーズ名がまだ空欄。これを揃えることで楽天検索結果に「ねむりFit」と表示されるようになる。</li>
+    <li><strong>楽天サーチ判定の対象範囲</strong>：店舗全体5,073商品で改修対象110＋103件。このうちアサギ該当数は要抽出。</li>
+    <li><strong>共有アカウントによる作業競合</strong>：山形県山形市RMSは複数事業者共用。坂巻社長／Aya Saiki／Yohei／北面さんが同時編集すると更新が衝突する可能性。Slackで作業宣言する運用を提案。</li>
+  </ul>
+
+  <h2>次のステップ</h2>
+  <ol style="font-size:13.5px;color:var(--ink-soft)">
+    <li>このページを坂巻社長／Aya Saikiに共有（Slack＋Asana）</li>
+    <li>本日（5/13）から <strong>FY25-361 シングル</strong>の製品情報入力に着手</li>
+    <li>毎日1商品の更新ログを Asanaタスクに残す</li>
+    <li>5/19にWeek1の振り返り → Week2のチューニング</li>
+    <li>5/26に楽天サーチでアサギ商品の判定結果を抽出 → 改修対象を確定</li>
+    <li>6/9に4週間の月次振り返り（坂巻社長＋チーム共有）</li>
+  </ol>
+
+</div>
+
+<footer class="site-footer">
+  株式会社マキテラス ・ 社内ポータル ・ <a href="rakuten-ec-growth.html">楽天ECグロースDB</a> ／ アサギ株式会社 ・ 最終更新 2026-05-13
+</footer>
+
+</body>
+</html>
